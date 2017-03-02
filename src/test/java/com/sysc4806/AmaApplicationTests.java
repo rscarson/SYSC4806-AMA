@@ -1,4 +1,4 @@
-package com.sysc4808;
+package com.sysc4806;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

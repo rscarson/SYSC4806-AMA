@@ -1,8 +1,6 @@
 package com.sysc4806;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.ArrayList;
 
 /**
@@ -17,15 +15,24 @@ public class Post {
     private long id;
 
     private String title;
+
+    @ManyToOne
     private User poster;
+
     private String description;
+
     private ArrayList<String> tags;
 
+    public Post() {
+        tags = new ArrayList<>();
+    }
+
     public Post(String title, User poster, String description){
+        this();
+
         this.title = title;
         this.poster = poster;
         this.description = description;
-        tags = new ArrayList<>();
     }
 
     public long getId(){

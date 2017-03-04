@@ -6,10 +6,10 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 </head>
 <body>
-    <a href="/ama/index">View AMAs</a> | <a>Submit AMAs</a> | <a href="#">My AMAs</a>
+    <a href="/ama/">View AMAs</a> | <a>Submit AMAs</a> | <a href="#">My AMAs</a>
 
     <h2>Submit an AMA</h2>
-    <form action="ama/new" method="post">
+    <form action="/ama/new" method="post">
         <p>
             <label for="username">Username</label><br/>
             <input type="text" id="username" name="username" />
@@ -22,7 +22,7 @@
 
         <p>
             <label for="title">Description</label><br/>
-            <textarea id="title" name="title"></textarea>
+            <textarea id="description" name="description"></textarea>
         </p>
 
         <p>

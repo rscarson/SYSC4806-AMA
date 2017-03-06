@@ -6,9 +6,9 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 </head>
 <body>
-    <a href="/ama/index">View AMAs</a> | <a href="/ama/new">Submit AMAs</a> | <a href="#">My AMAs</a>
+    <a href="/ama/">View AMAs</a> | <a href="/ama/new">Submit AMAs</a> | <a href="#">My AMAs</a>
 
-    <h2>${ama.title} <small style="color:#666" th:text="${ama.poster.username}"></small></h2>
+    <h2 th:text="${ama.title}"> <small style="color:#666" th:text="${username}"></small></h2>
     <p th:text="${ama.description}"></p>
     <p th:text="${ama.tags}"></p>
 </body>

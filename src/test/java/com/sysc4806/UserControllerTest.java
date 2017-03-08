@@ -25,11 +25,11 @@ public class UserControllerTest {
 
     @Test
     public void shouldReturnUserIndex() throws Exception {
-        this.mockMvc.perform(get("/users")).andDo(print()).andExpect(status().isOk());
+        this.mockMvc.perform(get("/user")).andDo(print()).andExpect(status().isOk());
     }
 
     @Test
     public void shouldReturnNewUserFrom() throws Exception {
-        this.mockMvc.perform(get("/users/new")).andDo(print()).andExpect(status().isOk());
+        this.mockMvc.perform(get("/user/new")).andDo(print()).andExpect(status().isOk());
     }
 }

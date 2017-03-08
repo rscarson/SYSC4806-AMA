@@ -14,19 +14,19 @@ public class UserController {
     @Autowired
     UserRepository userRepo;
 
-    @RequestMapping("/users")
+    @RequestMapping("/user")
     public String userIndex(Model model){
         model.addAttribute("users", userRepo.findAll());
-        return "users/index";
+        return "user/index";
     }
 
-    @GetMapping("/users/new")
+    @GetMapping("/user/new")
     public String userForm(Model model){
         model.addAttribute("user", new User());
         return "user/new";
     }
 
-    @PostMapping("/users/new")
+    @PostMapping("/user/new")
     public String postNewUser(@RequestParam(value="userName") String userName, Model model){
         User u = new User(userName);
         userRepo.save(u);
@@ -34,7 +34,7 @@ public class UserController {
         return "user/view";
     }
 
-    @RequestMapping("/users/view")
+    @RequestMapping("/user/view")
     public String viewUser(@RequestParam(value="id")Long user, Model model){
         User u = userRepo.findOne(user);
         model.addAttribute("user", u);

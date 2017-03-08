@@ -1,21 +1,20 @@
 package com.sysc4806;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Created by maxwelldemelo on 3/2/2017.
  */
+@Controller
 public class UserController {
 
     @Autowired
     UserRepository userRepo;
 
-    @GetMapping("/users")
+    @RequestMapping("/users")
     public String userIndex(Model model){
         model.addAttribute("users", userRepo.findAll());
         return "users/index";
@@ -35,7 +34,7 @@ public class UserController {
         return "user/view";
     }
 
-    @RequestMapping("/user/view")
+    @RequestMapping("/users/view")
     public String viewUser(@RequestParam(value="id")Long user, Model model){
         User u = userRepo.findOne(user);
         model.addAttribute("user", u);

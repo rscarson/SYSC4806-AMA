@@ -27,7 +27,7 @@ public class UserController {
     }
 
     @PostMapping("/user/new")
-    public String postNewUser(@RequestParam(value="userName") String userName, Model model){
+    public String postNewUser(@RequestParam(value="username") String userName, Model model){
         User u = new User(userName);
         userRepo.save(u);
         model.addAttribute("user", u);

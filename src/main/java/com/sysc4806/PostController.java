@@ -1,12 +1,15 @@
 package com.sysc4806;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+
+import com.sysc4806.exceptions.ResourceNotFoundException;
 
 /**
  * Created by adambatson on 3/2/2017.
@@ -51,8 +54,12 @@ public class PostController {
     @RequestMapping("/ama/view")
     public String viewAMA(@RequestParam(value="id") Long ama, Model model) {
         Post p = postRepo.findOne(ama);
-        model.addAttribute("ama", p);
-        return "ama/view";
+        if (p == null) {
+            throw new ResourceNotFoundException();
+        } else {
+            model.addAttribute("ama", p);
+            return "ama/view";
+        }
     }
 
 }

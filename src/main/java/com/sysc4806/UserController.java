@@ -1,5 +1,6 @@
 package com.sysc4806;
 
+import com.sysc4806.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -37,7 +38,12 @@ public class UserController {
     @RequestMapping("/user/view")
     public String viewUser(@RequestParam(value="id")Long user, Model model){
         User u = userRepo.findOne(user);
-        model.addAttribute("user", u);
-        return "user/view";
+        if(u == null){
+            throw new ResourceNotFoundException();
+        }
+        else{
+            model.addAttribute("user", u);
+            return "user/view";
+        }
     }
 }

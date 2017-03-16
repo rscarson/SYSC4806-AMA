@@ -26,10 +26,6 @@ public class PostControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @Autowired
-    private PostRepository postRepo;
-
-
     @Test
     public void shouldReturnAMAIndex() throws Exception {
         this.mockMvc.perform(get("/ama")).andDo(print()).andExpect(status().isOk());

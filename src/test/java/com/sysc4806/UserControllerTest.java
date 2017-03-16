@@ -9,6 +9,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -31,5 +32,25 @@ public class UserControllerTest {
     @Test
     public void shouldReturnNewUserFrom() throws Exception {
         this.mockMvc.perform(get("/user/new")).andDo(print()).andExpect(status().isOk());
+    }
+
+    @Test
+    public void addUser() throws Exception {
+        this.mockMvc.perform(post("/user/new")
+                .param("username", "Max DeMelo"))
+                .andExpect(status().isOk())
+                .andReturn();
+    }
+
+    @Test
+    public void checkUser() throws Exception{
+        addUser();
+        this.mockMvc.perform(get("/user/view?id=1")).andExpect(status().isOk());
+    }
+
+    @Test
+    public void check404Exception() throws Exception{
+        this.mockMvc.perform((get("user/view?id=404")))
+                .andExpect(status().is4xxClientError());
     }
 }

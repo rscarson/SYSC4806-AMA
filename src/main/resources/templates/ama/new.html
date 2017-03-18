@@ -1,36 +1,28 @@
-<!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>Submit an AMA</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-</head>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>...</head>
 <body>
-    <a href="/ama/">View AMAs</a> | <a>Submit AMAs</a> | <a href="#">My AMAs</a>
-
-    <h2>Submit an AMA</h2>
+<div class="container" th:fragment="content">
     <form action="/ama/new" method="post">
-        <p>
+        <div class="form-group">
             <label for="username">Username</label><br/>
-            <input type="text" id="username" name="username" />
-        </p>
-
-        <p>
-            <label for="title">Title</label><br/>
-            <input type="text" id="title" name="title" />
-        </p>
-
-        <p>
-            <label for="title">Description</label><br/>
-            <textarea id="description" name="description"></textarea>
-        </p>
-
-        <p>
-            <label for="tags">Comma separated tags</label><br/>
-            <input type="text" id="tags" name="tags" />
-        </p>
-
-        <input type="submit" value="Submit" />
+            <input type="text" class="form-control" id="username" name="username" placeholder="Username" />
+        </div>
+        <div class="form-group">
+            <label for="username">Title</label><br/>
+            <input type="text" class="form-control" id="title" name="title" placeholder="Title" />
+        </div>
+        <div class="form-group">
+            <label for="username">Description</label><br/>
+            <textarea class="form-control" id="description" name="description" placeholder="Description" />
+        </div>
+        <div class="form-group">
+            <label for="username">Comma separated tags</label><br/>
+            <input type="text" class="form-control" id="tags" name="tags" placeholder="Tags" />
+        </div>
+        <button type="submit" class="btn btn-default">Submit</button>
     </form>
+</div>
 </body>
 </html>

@@ -1,24 +1,22 @@
-<!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>All AMAs</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-</head>
-<body>
-    <a href="/ama/">View AMAs</a> | <a href="/ama/new">Submit AMAs</a> | <a href="#">My AMAs</a>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 
-    <h2>All AMAs</h2>
-    <table>
-        <tr>
-            <th>Title</th><th>Username</th><th>Actions</th>
-        </tr>
-        <tr th:each="ama : ${amas}">
-            <td th:text="${ama.title}"></td>
-            <td th:text="${ama.poster.userName}"></td>
-            <td><a th:href="@{/ama/view(id=${ama.id})}">View</a></td>
-        </tr>
-    </table>
+    <head>...</head>
+    <body>
+        <div class="container" th:fragment="content">
+            <a href="/ama/">View AMAs</a> | <a href="/ama/new">Submit AMAs</a> | <a href="#">My AMAs</a>
 
-</body>
+            <h2>All AMAs</h2>
+            <table>
+                <tr>
+                    <th>Title</th><th>Username</th><th>Actions</th>
+                </tr>
+                <tr th:each="ama : ${amas}">
+                    <td th:text="${ama.title}"></td>
+                    <td th:text="${ama.poster.userName}"></td>
+                    <td><a th:href="@{/ama/view(id=${ama.id})}">View</a></td>
+                </tr>
+            </table>
+        </div>
+    </body>
 </html>

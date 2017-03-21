@@ -1,7 +1,5 @@
 package com.sysc4806;
 
-import org.thymeleaf.processor.CommentNodeProcessorMatcher;
-
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +18,8 @@ public class Comment {
     private Comment parent;
     @OneToMany
     private List<Comment> children;
+    @OneToOne
+    private Post post;
     private String content;
     private int votes;
 
@@ -58,6 +58,10 @@ public class Comment {
     public void setContent(String content) { this.content = content; }
 
     public String getContent() { return content; }
+
+    public Post getPost() { return post; }
+
+    public void setPost(Post post) { this.post = post; }
 
     public int getVotes() { return votes; }
 

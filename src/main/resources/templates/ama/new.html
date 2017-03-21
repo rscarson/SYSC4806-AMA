@@ -4,21 +4,22 @@
 <head>...</head>
 <body>
 <div class="container" th:fragment="content">
+    <h3>Submit AMA</h3>
     <form action="/ama/new" method="post">
         <div class="form-group">
             <label for="username">Username</label><br/>
             <input type="text" class="form-control" id="username" name="username" placeholder="Username" />
         </div>
         <div class="form-group">
-            <label for="username">Title</label><br/>
+            <label for="title">Title</label><br/>
             <input type="text" class="form-control" id="title" name="title" placeholder="Title" />
         </div>
         <div class="form-group">
-            <label for="username">Description</label><br/>
+            <label for="description">Description</label><br/>
             <textarea class="form-control" id="description" name="description" placeholder="Description" />
         </div>
         <div class="form-group">
-            <label for="username">Comma separated tags</label><br/>
+            <label for="tags">Comma separated tags</label><br/>
             <input type="text" class="form-control" id="tags" name="tags" placeholder="Tags" />
         </div>
         <button type="submit" class="btn btn-default">Submit</button>

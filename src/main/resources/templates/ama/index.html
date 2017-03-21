@@ -1,17 +1,16 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-
-    <head>...</head>
-    <body>
-        <div class="container" th:fragment="content">
+<head></head>
+<body>
+<div class="container" th:fragment="content">
             <span th:each="ama : ${amas}" th:remove="tag">
                 <div>
-                    <h3 th:text="${ama.title}"></h3>
+                    <a th:href="@{/ama/view(id=${ama.id})}"><h3 th:text="${ama.title}"></h3></a>
                     <small class="text-muted">Submitted ### by
                         <a th:href="@{/user/view(id=${ama.poster.id})}"><span th:text="${ama.poster.userName}" th:remove="tag"></span></a>
                     </small>
                 </div>
             </span>
-        </div>
-    </body>
+</div>
+</body>
 </html>

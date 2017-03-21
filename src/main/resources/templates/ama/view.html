@@ -1,15 +1,20 @@
-<!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>View AMA</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-</head>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head></head>
 <body>
-    <a href="/ama/">View AMAs</a> | <a href="/ama/new">Submit AMAs</a> | <a href="#">My AMAs</a>
-
-    <h2 th:text="${ama.title}"> <small style="color:#666" th:text="${username}"></small></h2>
-    <p th:text="${ama.description}"></p>
-    <p th:text="${ama.tags}"></p>
+<div class="container" th:fragment="content">
+    <div>
+        <h3 th:text="${ama.title}"></h3>
+        <p th:text="${ama.description}"></p>
+        <small class="text-muted">Submitted ### by
+            <a th:href="@{/user/view(id=${ama.poster.id})}"><span th:text="${ama.poster.userName}" th:remove="tag"></span></a>
+        </small>
+        <p><small class="text-muted">
+                    <span th:each="tag : ${ama.getTags()}" th:remove="tag">
+                        <a href="#"><span th:text="${tag}" th:remove="tag"></span></a>
+                    </span>
+        </small></p>
+    </div>
+</div>
 </body>
 </html>

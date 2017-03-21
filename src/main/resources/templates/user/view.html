@@ -1,12 +1,9 @@
-<!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>View AMA</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-</head>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head></head>
 <body>
-    <h1>User</h1>
-    <h2 th:text="${user.userName}"></h2>
+<div class="container" th:fragment="content">
+    <h3>Overview for <span th:remove="tag" th:text="${user.userName}"></span></h3>
+</div>
 </body>
 </html>

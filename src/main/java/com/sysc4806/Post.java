@@ -2,6 +2,7 @@ package com.sysc4806;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by maxwelldemelo on 3/2/2017.
@@ -19,12 +20,19 @@ public class Post {
     @ManyToOne
     private User poster;
 
+    @OneToMany
+    private List<Comment> comments;
+
     private String description;
 
     private ArrayList<String> tags;
 
+    private int votes;
+
     public Post() {
         tags = new ArrayList<>();
+        comments = new ArrayList<>();
+        votes = 0;
     }
 
     public Post(String title, User poster, String description){
@@ -66,6 +74,16 @@ public class Post {
     public void setDescription(String description){
         this.description = description;
     }
+
+    public List<Comment> getComments() { return comments; }
+
+    public void addComment(Comment comment) { comments.add(comment); }
+
+    public void upVote() { votes ++; }
+
+    public void downVote() { votes --; }
+
+    public int getVotes() { return votes; }
 
     public ArrayList<String> getTags(){
         return tags;

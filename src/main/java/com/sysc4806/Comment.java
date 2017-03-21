@@ -24,10 +24,9 @@ public class Comment {
     private int votes;
 
     public Comment(Comment parent, String content) {
+        this();
         this.parent = parent;
         this.content = content;
-        children = new ArrayList<>();
-        votes = 0;
     }
 
     public Comment(String content) {

@@ -25,7 +25,7 @@ public class PostController {
     @Autowired
     UserRepository userRepo;
 
-    @RequestMapping("/ama")
+    @RequestMapping({"/ama", "/"})
     public String amaIndex(Model model) {
         model.addAttribute("amas", postRepo.findAll());
         model.addAttribute("title", "All Posts");

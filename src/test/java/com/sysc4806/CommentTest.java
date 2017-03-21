@@ -30,7 +30,7 @@ public class CommentTest {
     public void testDownvote() {
         assertEquals(0, comment.getVotes());
         comment.downVote();
-        assertEquals(1, comment.getVotes());
+        assertEquals(-1, comment.getVotes());
     }
 
     @Test

@@ -66,7 +66,7 @@ public class Comment {
 
     public void upVote() { votes ++; }
 
-    public void downVote() { votes ++; }
+    public void downVote() { votes --; }
 
     public ArrayList<Comment> getAncestory() {
         ArrayList<Comment> parents = new ArrayList<>();

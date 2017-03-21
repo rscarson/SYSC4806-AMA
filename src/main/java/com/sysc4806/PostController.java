@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import com.sysc4806.exceptions.ResourceNotFoundException;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 /**
  * Created by adambatson on 3/2/2017.
@@ -23,21 +25,23 @@ public class PostController {
     @Autowired
     UserRepository userRepo;
 
-    @RequestMapping("/ama")
+    @RequestMapping({"/ama", "/"})
     public String amaIndex(Model model) {
         model.addAttribute("amas", postRepo.findAll());
+        model.addAttribute("title", "All Posts");
         return "ama/index";
     }
 
     @GetMapping("/ama/new")
     public String amaForm(Model model) {
         model.addAttribute("ama", new Post());
+        model.addAttribute("title", "New Post");
         return "ama/new";
     }
 
     @PostMapping("/ama/new")
     public String postNewAma(@RequestParam(value="username") String username, @RequestParam(value="title") String title,
-        @RequestParam(value="description") String description, @RequestParam(value="tags") String tags, Model model) {
+                                   @RequestParam(value="description") String description, @RequestParam(value="tags") String tags, Model model) {
 
         User u = new User(username);
         userRepo.save(u);
@@ -47,6 +51,7 @@ public class PostController {
         postRepo.save(p);
 
         model.addAttribute("ama", p);
+        model.addAttribute("title", p.getTitle());
 
         return "ama/view";
     }
@@ -58,6 +63,7 @@ public class PostController {
             throw new ResourceNotFoundException();
         } else {
             model.addAttribute("ama", p);
+            model.addAttribute("title", p.getTitle());
             return "ama/view";
         }
     }

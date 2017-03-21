@@ -17,12 +17,14 @@ public class UserController {
 
     @RequestMapping("/user")
     public String userIndex(Model model){
+        model.addAttribute("title", "All Users");
         model.addAttribute("users", userRepo.findAll());
         return "user/index";
     }
 
     @GetMapping("/user/new")
     public String userForm(Model model){
+        model.addAttribute("title", "Sign Up");
         model.addAttribute("user", new User());
         return "user/new";
     }
@@ -31,6 +33,7 @@ public class UserController {
     public String postNewUser(@RequestParam(value="username") String userName, Model model){
         User u = new User(userName);
         userRepo.save(u);
+        model.addAttribute("title", "Overview for "+u.getUserName());
         model.addAttribute("user", u);
         return "user/view";
     }
@@ -42,6 +45,7 @@ public class UserController {
             throw new ResourceNotFoundException();
         }
         else{
+            model.addAttribute("title", "Overview for "+u.getUserName());
             model.addAttribute("user", u);
             return "user/view";
         }

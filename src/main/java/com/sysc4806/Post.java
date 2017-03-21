@@ -27,9 +27,12 @@ public class Post {
 
     private ArrayList<String> tags;
 
+    private int votes;
+
     public Post() {
         tags = new ArrayList<>();
         comments = new ArrayList<>();
+        votes = 0;
     }
 
     public Post(String title, User poster, String description){
@@ -75,6 +78,12 @@ public class Post {
     public List<Comment> getComments() { return comments; }
 
     public void addComment(Comment comment) { comments.add(comment); }
+
+    public void upVote() { votes ++; }
+
+    public void downVote() { votes --; }
+
+    public int getVotes() { return votes; }
 
     public ArrayList<String> getTags(){
         return tags;

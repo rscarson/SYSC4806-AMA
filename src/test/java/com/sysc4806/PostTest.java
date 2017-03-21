@@ -34,4 +34,18 @@ public class PostTest {
         assertTrue(p1.getTags().contains("Testy"));
         assertEquals(1, p1.getTags().size());
     }
+
+    @Test
+    public void testUpvote() {
+        assertEquals(0, p1.getVotes());
+        p1.upVote();
+        assertEquals(1, p1.getVotes());
+    }
+
+    @Test
+    public void testDownvote() {
+        assertEquals(0, p1.getVotes());
+        p1.downVote();
+        assertEquals(-1, p1.getVotes());
+    }
 }

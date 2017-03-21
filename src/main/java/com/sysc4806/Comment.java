@@ -2,9 +2,7 @@ package com.sysc4806;
 
 import org.thymeleaf.processor.CommentNodeProcessorMatcher;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +16,9 @@ public class Comment {
     @GeneratedValue
     private long id;
 
+    @OneToOne
     private Comment parent;
+    @OneToMany
     private List<Comment> children;
     private String content;
     private int votes;
@@ -32,6 +32,19 @@ public class Comment {
 
     public Comment(String content) {
         this(null, content);
+    }
+
+    public Comment() {
+        children = new ArrayList<>();
+        votes = 0;
+    }
+
+    public long getId(){
+        return id;
+    }
+
+    public void setId(long id){
+        this.id = id;
     }
 
     public void setParent(Comment parent) { this.parent = parent; }
@@ -52,7 +65,7 @@ public class Comment {
 
     public void downVote() { votes ++; }
 
-    public List<Comment> getAncestory() {
+    public ArrayList<Comment> getAncestory() {
         ArrayList<Comment> parents = new ArrayList<>();
         Comment curr = this;
         while(curr.parent != null) {

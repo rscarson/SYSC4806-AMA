@@ -17,10 +17,10 @@ public class VoteStatus {
     private Vote type;
 
     @ManyToOne
-    private long commentID;
+    private Comment comment;
 
     @ManyToOne
-    private long userID;
+    private User user;
 
     public long getId() {
         return id;
@@ -30,20 +30,20 @@ public class VoteStatus {
         this.id = id;
     }
 
-    public long getCommentID() {
-        return commentID;
+    public Comment getComment() {
+        return comment;
     }
 
-    public void setCommentID(long commentID) {
-        this.commentID = commentID;
+    public void setComment(Comment comment) {
+        this.comment = comment;
     }
 
-    public long getUserID() {
-        return userID;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserID(long userID) {
-        this.userID = userID;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public Vote getType() {
@@ -55,6 +55,6 @@ public class VoteStatus {
     }
 
     public enum Vote {
-        None, Up, Down
+        Up, Down
     }
 }

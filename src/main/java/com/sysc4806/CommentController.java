@@ -37,19 +37,35 @@ public class CommentController {
     }
 
     @PostMapping("/comment/new")
-    public String postNewComment(@RequestParam(value="userName") String username, @RequestParam(value="postID") long postID,
-                                 @RequestParam(value="content") String content, Model model){
-        User u = new User(username);
-        userRepository.save(u);
-
+    public String postNewComment(@RequestParam(value="postID") long postID, @RequestParam(value="content") String content, Model model){
         Post parent = postRepository.findOne(postID);
         Comment c = new Comment();
-        c.setContent(content); c.setParent(null);
+        c.setContent(content); c.setParent(parent);
         commentRepository.save(c);
 
         model.addAttribute("title", parent.getTitle());
         model.addAttribute("ama", parent);
-        return "user/view";
+        model.addAttribute("comments", commentRepository.findByParent(parent));
+        return "ama/view";
+    }
+
+    @PostMapping("/comment/edit")
+    public String postEdit(@RequestParam(value="commentID") long commentID, @RequestParam(value="content") String content, Model model){
+        Comment c = commentRepository.findOne(commentID);
+        c.setContent(content);
+        commentRepository.save(c);
+
+        model.addAttribute("title", c.getParent().getTitle());
+        model.addAttribute("comment", c);
+        return "comment/view";
+    }
+
+    @RequestMapping("comment/view")
+    public String viewComment(@RequestParam(value="id") long comment, Model model) {
+        Comment c = commentRepository.findOne(comment);
+        model.addAttribute("title", c.getParent().getTitle());
+        model.addAttribute("comment", c);
+        return "comment/view";
     }
 
     /**
@@ -61,10 +77,11 @@ public class CommentController {
      */
     private int vote(long userID, long commentID, VoteStatus.Vote type) {
         Comment comment = commentRepository.findOne(commentID);
-        VoteStatus status = voteStatusRepository.findByCommentIDAndUserIDAndType(commentID, userID, type);
+        User user = userRepository.findOne(userID);
+        VoteStatus status = voteStatusRepository.findByCommentAndUserAndType(commentID, userID, type);
         if (status == null) {
             status = new VoteStatus();
-            status.setCommentID(commentID); status.setUserID(userID); status.setType(type);
+            status.setComment(comment); status.setUser(user); status.setType(type);
             voteStatusRepository.save(status);
             if (type == VoteStatus.Vote.Up) comment.upVote(); else comment.downVote();
         } else {

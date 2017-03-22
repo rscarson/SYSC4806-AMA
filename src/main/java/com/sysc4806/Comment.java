@@ -15,7 +15,7 @@ public class Comment {
     private long id;
 
     @OneToOne
-    private Comment parent;
+    private Post parent;
     @OneToMany
     private List<Comment> children;
     @OneToOne
@@ -23,7 +23,7 @@ public class Comment {
     private String content;
     private int votes;
 
-    public Comment(Comment parent, String content) {
+    public Comment(Post parent, String content) {
         this();
         this.parent = parent;
         this.content = content;
@@ -46,9 +46,9 @@ public class Comment {
         this.id = id;
     }
 
-    public void setParent(Comment parent) { this.parent = parent; }
+    public void setParent(Post parent) { this.parent = parent; }
 
-    public Comment getParent() { return parent; }
+    public Post getParent() { return parent; }
 
     public void addChild(Comment child) { children.add(child); }
 
@@ -68,8 +68,9 @@ public class Comment {
 
     public void downVote() { votes --; }
 
+    /*
     public ArrayList<Comment> getAncestory() {
-        ArrayList<Comment> parents = new ArrayList<>();
+        ArrayList<Post> parents = new ArrayList<>();
         Comment curr = this;
         while(curr.parent != null) {
             parents.add(curr.parent);
@@ -77,6 +78,7 @@ public class Comment {
         }
         return parents;
     }
+    */
 
 
 }

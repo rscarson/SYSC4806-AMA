@@ -25,6 +25,9 @@ public class PostController {
     @Autowired
     UserRepository userRepo;
 
+    @Autowired
+    CommentRepository commentRepo;
+
     @RequestMapping({"/ama", "/"})
     public String amaIndex(Model model) {
         model.addAttribute("amas", postRepo.findAll());
@@ -52,6 +55,7 @@ public class PostController {
 
         model.addAttribute("ama", p);
         model.addAttribute("title", p.getTitle());
+        model.addAttribute("comments", commentRepo.findByParent(p));
 
         return "ama/view";
     }
@@ -64,6 +68,7 @@ public class PostController {
         } else {
             model.addAttribute("ama", p);
             model.addAttribute("title", p.getTitle());
+            model.addAttribute("comments", commentRepo.findByParent(p));
             return "ama/view";
         }
     }

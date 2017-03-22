@@ -3,6 +3,7 @@ package com.sysc4806;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -14,23 +15,61 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class CommentController {
 
     @Autowired
+    UserRepository userRepository;
+
+    @Autowired
     VoteStatusRepository voteStatusRepository;
 
     @Autowired
     CommentRepository commentRepository;
 
+    @Autowired
+    PostRepository postRepository;
+
     @RequestMapping("/comment/up")
-    public @ResponseBody int upVote(@RequestParam(value="userID")Long userID, @RequestParam(value="commentID")Long commentID){
+    public @ResponseBody int upVote(@RequestParam(value="userID")long userID, @RequestParam(value="commentID")long commentID){
+        return vote(userID, commentID, VoteStatus.Vote.Up);
+    }
+
+    @RequestMapping("/comment/down")
+    public @ResponseBody int downVote(@RequestParam(value="userID")long userID, @RequestParam(value="commentID")long commentID){
+        return vote(userID, commentID, VoteStatus.Vote.Down);
+    }
+
+    @PostMapping("/comment/new")
+    public String postNewComment(@RequestParam(value="userName") String username, @RequestParam(value="postID") long postID,
+                                 @RequestParam(value="content") String content, Model model){
+        User u = new User(username);
+        userRepository.save(u);
+
+        Post parent = postRepository.findOne(postID);
+        Comment c = new Comment();
+        c.setContent(content); c.setParent(null);
+        commentRepository.save(c);
+
+        model.addAttribute("title", parent.getTitle());
+        model.addAttribute("ama", parent);
+        return "user/view";
+    }
+
+    /**
+     * Vote on a comment
+     * @param userID The source user
+     * @param commentID The target
+     * @param type Type of vote to apply / remove
+     * @return New vote count
+     */
+    private int vote(long userID, long commentID, VoteStatus.Vote type) {
         Comment comment = commentRepository.findOne(commentID);
-        VoteStatus status = voteStatusRepository.findByCommentIDAndUserIDAndType(commentID, userID, VoteStatus.Vote.Up);
+        VoteStatus status = voteStatusRepository.findByCommentIDAndUserIDAndType(commentID, userID, type);
         if (status == null) {
             status = new VoteStatus();
-            status.setCommentID(commentID); status.setUserID(userID); status.setType(VoteStatus.Vote.Up);
+            status.setCommentID(commentID); status.setUserID(userID); status.setType(type);
             voteStatusRepository.save(status);
-            comment.upVote();
+            if (type == VoteStatus.Vote.Up) comment.upVote(); else comment.downVote();
         } else {
             voteStatusRepository.delete(status);
-            comment.downVote();
+            if (type == VoteStatus.Vote.Up) comment.downVote(); else comment.upVote();
         }
 
         return comment.getVotes();

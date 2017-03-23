@@ -1,0 +1,16 @@
+security:
+  oauth2:
+    client:
+      clientId: 1021135535242-lvtlnpush7rnob15dbgpeq29agkf1db2.apps.googleusercontent.com
+      clientSecret: ${SPRING_OAUTH_SECRET}
+      accessTokenUri: https://www.googleapis.com/oauth2/v4/token
+      userAuthorizationUri: https://accounts.google.com/o/oauth2/v2/auth
+      tokenName: oauth_token
+      clientAuthenticationScheme: form
+      scope:
+        - openid
+        - email
+        - profile
+    resource:
+      userInfoUri: https://www.googleapis.com/oauth2/v3/userinfo
+      preferTokenInfo: true

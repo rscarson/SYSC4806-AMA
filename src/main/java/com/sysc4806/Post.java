@@ -1,5 +1,8 @@
 package com.sysc4806;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +13,6 @@ import java.util.List;
 
 @Entity
 public class Post {
-
     @Id
     @GeneratedValue
     private long id;
@@ -20,9 +22,6 @@ public class Post {
     @ManyToOne
     private User poster;
 
-    @OneToMany
-    private List<Comment> comments;
-
     private String description;
 
     private ArrayList<String> tags;
@@ -31,7 +30,6 @@ public class Post {
 
     public Post() {
         tags = new ArrayList<>();
-        comments = new ArrayList<>();
         votes = 0;
     }
 
@@ -74,10 +72,6 @@ public class Post {
     public void setDescription(String description){
         this.description = description;
     }
-
-    public List<Comment> getComments() { return comments; }
-
-    public void addComment(Comment comment) { comments.add(comment); }
 
     public void upVote() { votes ++; }
 

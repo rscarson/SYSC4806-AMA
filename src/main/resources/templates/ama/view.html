@@ -14,6 +14,20 @@
                         <a href="#"><span th:text="${tag}" th:remove="tag"></span></a>
                     </span>
         </small></p>
+
+        <form action="/comment/new" method="post">
+            <input type="hidden" name="postID" th:value="${ama.id}" />
+            <div class="form-group">
+                <label for="content">Description</label><br/>
+                <textarea class="form-control" id="content" name="content" placeholder="Content" />
+            </div>
+            <button type="submit" class="btn btn-default">Comment</button>
+        </form>
+
+        <h3>Comments</h3>
+        <span th:each="comment : ${comments}" th:remove="tag">
+            <div th:text="${comment.content}"></div>
+        </span>
     </div>
 </div>
 </body>

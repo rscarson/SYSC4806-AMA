@@ -34,16 +34,6 @@ public class CommentTest {
     }
 
     @Test
-    public void testGetAncestory() {
-        Comment c2 = new Comment(comment, "Hello to you as well!");
-        Comment c3 = new Comment(c2, "How are you today?");
-        ArrayList<Comment> expected = new ArrayList<>();
-        expected.add(c2);
-        expected.add(comment);
-        assertEquals(expected, c3.getAncestory());
-    }
-
-    @Test
     public void testGetChildren() {
         Comment c2 = new Comment("Hello how are you todsy?");
         Comment c3 = new Comment("Goodbye!");

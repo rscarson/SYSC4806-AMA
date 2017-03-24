@@ -3,7 +3,7 @@ AMA tool for SYSC4806
 
 [Heroku](http://sysc4806-amatool.herokuapp.com/)
 
-## Milestone 2 Due April 6th 2017
+## Milestone 3 Due April 6th 2017
 The following tasks are currently in progress for the upcoming milestone:
 * Implement Google OAuth for logins
 * Implement User model

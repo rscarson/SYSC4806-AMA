@@ -7,7 +7,7 @@
         <h3 th:text="${ama.title}"></h3>
         <p th:text="${ama.description}"></p>
         <small class="text-muted">Submitted ### by
-            <a th:href="@{/user/view(id=${ama.poster.id})}"><span th:text="${ama.poster.userName}" th:remove="tag"></span></a>
+            <a th:href="@{/user/view(id=${ama.poster.id})}"><span th:text="${ama.poster.name}" th:remove="tag"></span></a>
         </small>
         <p><small class="text-muted">
                     <span th:each="tag : ${ama.getTags()}" th:remove="tag">
@@ -26,7 +26,10 @@
 
         <h3>Comments</h3>
         <span th:each="comment : ${comments}" th:remove="tag">
-            <div th:text="${comment.content}"></div>
+            <div>
+                <p th:text="${comment.content}"></p>
+                <a th:href="@{/user/view(id=${ama.poster.id})}"><small class="text-muted" th:text="${comment.poster.name}"></small></a>
+            </div>
         </span>
     </div>
 </div>

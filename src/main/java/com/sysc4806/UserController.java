@@ -15,29 +15,6 @@ public class UserController {
     @Autowired
     UserRepository userRepo;
 
-    @RequestMapping("/user")
-    public String userIndex(Model model){
-        model.addAttribute("title", "All Users");
-        model.addAttribute("users", userRepo.findAll());
-        return "user/index";
-    }
-
-    @GetMapping("/user/new")
-    public String userForm(Model model){
-        model.addAttribute("title", "Sign Up");
-        model.addAttribute("user", new User());
-        return "user/new";
-    }
-
-    @PostMapping("/user/new")
-    public String postNewUser(@RequestParam(value="username") String userName, Model model){
-        User u = new User(userName);
-        userRepo.save(u);
-        model.addAttribute("title", "Overview for "+u.getUserName());
-        model.addAttribute("user", u);
-        return "user/view";
-    }
-
     @RequestMapping("/user/view")
     public String viewUser(@RequestParam(value="id")Long user, Model model){
         User u = userRepo.findOne(user);
@@ -45,7 +22,7 @@ public class UserController {
             throw new ResourceNotFoundException();
         }
         else{
-            model.addAttribute("title", "Overview for "+u.getUserName());
+            model.addAttribute("title", "Overview for " + AuthenticationController.CurrentUser().getName());
             model.addAttribute("user", u);
             return "user/view";
         }

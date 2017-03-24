@@ -21,7 +21,7 @@ public class RepositoryTest {
 
     @Test
     public void TestPostAndUserRepository() {
-        User user = new User("username");
+        User user = new User();
         userRepository.save(user);
 
         assert(userRepository.findAll().iterator().hasNext());

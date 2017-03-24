@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head></head>
+<body>
+<div class="container" th:fragment="content">
+    <h1>Account Preferences</h1>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Currently Following</h3>
+        </div>
+        <ul class="list-group">
+            <span th:each="following : ${user.following}" th:remove="tag">
+                <li class="list-group-item">
+                    <a role="button" class="btn btn-xs btn-danger" href="#">Unfollow</a>
+                    <a th:href="@{/user/view(id=${following.id})}" th:text="${following.name}"></a>
+                </li>
+            </span>
+
+            <li class="list-group-item text-muted text-center" th:if="${#lists.isEmpty(user.following)}">
+                Nothing to show
+            </li>
+        </ul>
+    </div>
+</div>
+</body>
+</html>

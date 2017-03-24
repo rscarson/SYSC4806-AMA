@@ -40,12 +40,14 @@ public class CommentController {
     public String postNewComment(@RequestParam(value="postID") long postID, @RequestParam(value="content") String content, Model model){
         Post parent = postRepository.findOne(postID);
         Comment c = new Comment();
-        c.setContent(content); c.setParent(parent);
+        c.setPoster(AuthenticationController.CurrentUser());
+        c.setContent(content);
+        c.setPost(parent);
         commentRepository.save(c);
 
         model.addAttribute("title", parent.getTitle());
         model.addAttribute("ama", parent);
-        model.addAttribute("comments", commentRepository.findByParent(parent));
+        model.addAttribute("comments", commentRepository.findByPost(parent));
         return "ama/view";
     }
 
@@ -55,7 +57,7 @@ public class CommentController {
         c.setContent(content);
         commentRepository.save(c);
 
-        model.addAttribute("title", c.getParent().getTitle());
+        model.addAttribute("title", c.getPost().getTitle());
         model.addAttribute("comment", c);
         return "comment/view";
     }
@@ -63,7 +65,7 @@ public class CommentController {
     @RequestMapping("comment/view")
     public String viewComment(@RequestParam(value="id") long comment, Model model) {
         Comment c = commentRepository.findOne(comment);
-        model.addAttribute("title", c.getParent().getTitle());
+        model.addAttribute("title", c.getPost().getTitle());
         model.addAttribute("comment", c);
         return "comment/view";
     }

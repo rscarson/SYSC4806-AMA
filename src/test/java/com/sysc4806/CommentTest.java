@@ -12,11 +12,13 @@ import static org.junit.Assert.assertEquals;
  */
 public class CommentTest {
 
+    private Post post;
     private Comment comment;
 
     @Before
     public void setUp() {
-        comment = new Comment("Hello!");
+        post = new Post();
+        comment = new Comment(post, "Hello!");
     }
 
     @Test
@@ -35,9 +37,9 @@ public class CommentTest {
 
     @Test
     public void testGetChildren() {
-        Comment c2 = new Comment("Hello how are you todsy?");
-        Comment c3 = new Comment("Goodbye!");
-        Comment c4 = new Comment("Good and you?");
+        Comment c2 = new Comment(post, "Hello how are you todsy?");
+        Comment c3 = new Comment(post, "Goodbye!");
+        Comment c4 = new Comment(post, "Good and you?");
 
         ArrayList<Comment> expected = new ArrayList<>();
         expected.add(c2);

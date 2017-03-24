@@ -7,7 +7,7 @@
                 <div>
                     <a th:href="@{/ama/view(id=${ama.id})}"><h3 th:text="${ama.title}"></h3></a>
                     <small class="text-muted">Submitted ### by
-                        <a th:href="@{/user/view(id=${ama.poster.id})}"><span th:text="${ama.poster.userName}" th:remove="tag"></span></a>
+                        <a th:href="@{/user/view(id=${ama.poster.id})}"><span th:text="${ama.poster.name}" th:remove="tag"></span></a>
                     </small>
                 </div>
             </span>

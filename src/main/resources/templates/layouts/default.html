@@ -36,13 +36,19 @@
             <!-- Right menu -->
             <ul class="nav navbar-nav navbar-right">
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                        Hello, ### <span class="caret"></span>
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a href="#">Preferences</a></li>
-                        <li><a href="#">Log Out</a></li>
-                    </ul>
+                    <span th:if="${user != null}" th:remove="tag">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                            Hello,
+                            <span th:text="${user.email}" th:remove="tag"></span>
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a th:href="@{/user/view(id=${user.id})}">My Profile</a></li>
+                            <li><a href="/preferences">Preferences</a></li>
+                            <li><a data-th-method="post" href="/logout">Log Out</a></li>
+                        </ul>
+                    </span>
+                    <a th:if="${user == null}" href="/login">Log In With Google</a>
                 </li>
             </ul>
 

@@ -7,6 +7,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -27,16 +28,19 @@ public class PostControllerTest {
     private MockMvc mockMvc;
 
     @Test
+    @WithMockUser
     public void shouldReturnAMAIndex() throws Exception {
         this.mockMvc.perform(get("/ama")).andDo(print()).andExpect(status().isOk());
     }
 
     @Test
+    @WithMockUser
     public void shouldReturnNewAMAFrom() throws Exception {
         mockMvc.perform(get("/ama/new")).andDo(print()).andExpect(status().isOk());
     }
 
     @Test
+    @WithMockUser
     public void shouldCreateANewPost() throws Exception {
         mockMvc.perform(post("/ama/new")
                     .param("username", "adambatson")
@@ -49,12 +53,14 @@ public class PostControllerTest {
     }
 
     @Test
+    @WithMockUser
     public void shouldRenderAnAMAView() throws Exception {
         shouldCreateANewPost();
         mockMvc.perform(get("/ama/view?id=1")).andExpect(status().isOk());
 }
 
     @Test
+    @WithMockUser
     public void should404OnMissingAMA() throws Exception {
         mockMvc.perform((get("/ama/view?id=66")))
                 .andExpect(status().is4xxClientError());

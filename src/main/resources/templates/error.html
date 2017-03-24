@@ -3,8 +3,18 @@
 <head></head>
 <body>
 <div class="container" th:fragment="content">
+    <h1>An Error Has Occurred</h1>
     <h2 th:text="${exception}"></h2>
-    <p th:text="${exception.message}"></p>
+    <p th:text="${message}"></p>
+    <span th:each="e : ${stackTrace}" th:remove="tag">
+        <p th:text="${e}"></p>
+    </span>
+
+    <h2>Model Contents</h2>
+    <dl th:each="var : ${#vars}">
+        <dt th:text="${var.key}"></dt>
+        <dd th:text="${var.value}"></dd>
+    </dl>
 </div>
 </body>
 </html>

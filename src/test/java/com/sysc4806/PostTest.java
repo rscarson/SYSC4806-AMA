@@ -2,6 +2,8 @@ package com.sysc4806;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.web.servlet.request.RequestPostProcessor;
 
 import static org.junit.Assert.*;
 
@@ -9,14 +11,11 @@ import static org.junit.Assert.*;
  * Created by maxwelldemelo on 3/2/2017.
  */
 public class PostTest {
-
-    Post p1;
-    User u1;
+    private Post p1;
 
     @Before
-    public void setUp() throws Exception{
-        u1 = new User("MeloDeMelo");
-        p1 = new Post("AMA", u1, "Test AMA");
+    public void setup() {
+        p1 = new Post();
     }
 
     @Test

@@ -43,19 +43,17 @@ public class PostController {
     }
 
     @PostMapping("/ama/new")
-    public String postNewAma(@RequestParam(value="username") String username, @RequestParam(value="title") String title,
-                                   @RequestParam(value="description") String description, @RequestParam(value="tags") String tags, Model model) {
+    public String postNewAma(@RequestParam(value="title") String title,
+                             @RequestParam(value="description") String description,
+                             @RequestParam(value="tags") String tags, Model model) {
 
-        User u = new User(username);
-        userRepo.save(u);
-
-        Post p = new Post(title, u, description);
+        Post p = new Post(title, AuthenticationController.CurrentUser(), description);
         p.setTags(new ArrayList<>(Arrays.asList(tags.split(","))));
         postRepo.save(p);
 
         model.addAttribute("ama", p);
         model.addAttribute("title", p.getTitle());
-        model.addAttribute("comments", commentRepo.findByParent(p));
+        model.addAttribute("comments", commentRepo.findByPost(p));
 
         return "ama/view";
     }
@@ -68,7 +66,7 @@ public class PostController {
         } else {
             model.addAttribute("ama", p);
             model.addAttribute("title", p.getTitle());
-            model.addAttribute("comments", commentRepo.findByParent(p));
+            model.addAttribute("comments", commentRepo.findByPost(p));
             return "ama/view";
         }
     }

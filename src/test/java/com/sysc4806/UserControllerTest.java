@@ -1,12 +1,19 @@
 package com.sysc4806;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.security.SecurityAutoConfiguration;
+import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.RequestPostProcessor;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -25,30 +32,20 @@ public class UserControllerTest {
     private MockMvc mockMvc;
 
     @Test
-    public void shouldReturnUserIndex() throws Exception {
-        this.mockMvc.perform(get("/user")).andDo(print()).andExpect(status().isOk());
+    public void shouldHaveNoUser() throws Exception{
+        User user = AuthenticationController.CurrentUser();
+        assert(user == null);
     }
 
     @Test
-    public void shouldReturnNewUserFrom() throws Exception {
-        this.mockMvc.perform(get("/user/new")).andDo(print()).andExpect(status().isOk());
+    @WithMockUser
+    public void shouldGetActiveUser() throws Exception{
+        User user = AuthenticationController.CurrentUser();
+        this.mockMvc.perform(get("/user/view?id="+user.getId())).andExpect(status().isOk());
     }
 
     @Test
-    public void addUser() throws Exception {
-        this.mockMvc.perform(post("/user/new")
-                .param("username", "Max DeMelo"))
-                .andExpect(status().isOk())
-                .andReturn();
-    }
-
-    @Test
-    public void checkUser() throws Exception{
-        addUser();
-        this.mockMvc.perform(get("/user/view?id=1")).andExpect(status().isOk());
-    }
-
-    @Test
+    @WithMockUser
     public void check404Exception() throws Exception{
         this.mockMvc.perform((get("user/view?id=404")))
                 .andExpect(status().is4xxClientError());

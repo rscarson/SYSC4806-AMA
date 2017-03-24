@@ -15,8 +15,6 @@ public class LayoutInterceptor extends HandlerInterceptorAdapter {
     private static final String DEFAULT_LAYOUT = "layouts/default";
     private static final String DEFAULT_VIEW_ATTRIBUTE_NAME = "view";
 
-
-
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
         if (modelAndView == null || !modelAndView.hasView()) {
@@ -24,8 +22,8 @@ public class LayoutInterceptor extends HandlerInterceptorAdapter {
         }
 
         User user = AuthenticationController.CurrentUser();
-
         modelAndView.addObject("user", user);
+
         String originalViewName = modelAndView.getViewName();
         modelAndView.setViewName(DEFAULT_LAYOUT);
         modelAndView.addObject(DEFAULT_VIEW_ATTRIBUTE_NAME, originalViewName);

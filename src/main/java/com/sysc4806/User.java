@@ -43,8 +43,8 @@ public class User {
     public void follow(User u) {
         following.add(u);
     }
-
     public void unfollow(User u) {
         following.remove(u);
     }
+    public boolean following(User u) { return following.contains(u); }
 }

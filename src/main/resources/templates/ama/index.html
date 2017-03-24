@@ -5,9 +5,11 @@
 <div class="container" th:fragment="content">
             <span th:each="ama : ${amas}" th:remove="tag">
                 <div>
-                    <a th:href="@{/ama/view(id=${ama.id})}"><h3 th:text="${ama.title}"></h3></a>
+                    <a th:href="@{/ama/view(id=${ama.id})}">
+                        <h3 class="post" th:text="${ama.title}"></h3>
+                    </a>
                     <small class="text-muted">Submitted ### by
-                        <a th:href="@{/user/view(id=${ama.poster.id})}"><span th:text="${ama.poster.name}" th:remove="tag"></span></a>
+                        <span th:replace="fragments/user :: user(${ama.poster})"></span>
                     </small>
                 </div>
             </span>

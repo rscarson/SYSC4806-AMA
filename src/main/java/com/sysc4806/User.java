@@ -2,6 +2,7 @@ package com.sysc4806;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -41,10 +42,21 @@ public class User {
     public void setFollowing(List<User> following) { this.following = following; }
 
     public void follow(User u) {
-        following.add(u);
+        if (!isFollowing(u)) following.add(u);
     }
+
     public void unfollow(User u) {
-        following.remove(u);
+        Iterator<User> i = following.iterator();
+        while (i.hasNext()) {
+            User f = i.next();
+            if (f.id == u.id)
+                i.remove();
+        }
     }
-    public boolean following(User u) { return following.contains(u); }
+
+    public boolean isFollowing(User u) {
+        for (User f : following)
+            if (f.id == u.id) return true;
+        return false;
+    }
 }

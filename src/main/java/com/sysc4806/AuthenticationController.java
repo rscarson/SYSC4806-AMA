@@ -45,6 +45,7 @@ public class AuthenticationController extends WebSecurityConfigurerAdapter {
     @RequestMapping("/preferences")
     public String preferences(Model model) {
         model.addAttribute("user", AuthenticationController.CurrentUser());
+        model.addAttribute("title", "Account Preferences");
         return "authentication/preferences";
     }
 
@@ -52,7 +53,7 @@ public class AuthenticationController extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
         http.antMatcher("/**").authorizeRequests()
-            .antMatchers("/", "/login**", "/webjars/**").permitAll()
+            .antMatchers("/", "/login**", "/completed", "/ama/view**", "/user/view**", "/comment/view**", "/webjars/**").permitAll()
             .anyRequest().authenticated()
             .and().logout().logoutSuccessUrl("/").permitAll();
     }

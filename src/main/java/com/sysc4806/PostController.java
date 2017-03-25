@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import com.sysc4806.exceptions.ResourceNotFoundException;
 import org.springframework.web.servlet.ModelAndView;
@@ -28,16 +29,27 @@ public class PostController {
     @Autowired
     CommentRepository commentRepo;
 
-    @RequestMapping({"/ama", "/"})
+    @RequestMapping({"/"})
     public String amaIndex(Model model) {
         model.addAttribute("amas", postRepo.findAll());
-        model.addAttribute("title", "All Posts");
+        model.addAttribute("page", "index");
+        model.addAttribute("title", "All AMAs");
         return "ama/index";
+    }
+
+    @RequestMapping("/following")
+    public String following(Model model) {
+        List<Post> posts = postRepo.findByPoster(AuthenticationController.CurrentUser());
+        model.addAttribute("amas", posts);
+        model.addAttribute("page", "following");
+        model.addAttribute("title", "AMAs By Those I Follow");
+        return "ama/following";
     }
 
     @GetMapping("/ama/new")
     public String amaForm(Model model) {
         model.addAttribute("ama", new Post());
+        model.addAttribute("page", "new");
         model.addAttribute("title", "New Post");
         return "ama/new";
     }
@@ -53,6 +65,7 @@ public class PostController {
 
         model.addAttribute("ama", p);
         model.addAttribute("title", p.getTitle());
+        model.addAttribute("page", "view");
         model.addAttribute("comments", commentRepo.findByPost(p));
 
         return "ama/view";
@@ -66,9 +79,9 @@ public class PostController {
         } else {
             model.addAttribute("ama", p);
             model.addAttribute("title", p.getTitle());
+            model.addAttribute("page", "view");
             model.addAttribute("comments", commentRepo.findByPost(p));
             return "ama/view";
         }
     }
-
 }

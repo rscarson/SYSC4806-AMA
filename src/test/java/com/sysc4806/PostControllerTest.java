@@ -30,7 +30,7 @@ public class PostControllerTest {
     @Test
     @WithMockUser
     public void shouldReturnAMAIndex() throws Exception {
-        this.mockMvc.perform(get("/ama")).andDo(print()).andExpect(status().isOk());
+        this.mockMvc.perform(get("/")).andDo(print()).andExpect(status().isOk());
     }
 
     @Test

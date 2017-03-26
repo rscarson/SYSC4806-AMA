@@ -51,10 +51,10 @@ public class UserControllerTest {
     @Test
     @WithMockUser
     public void shouldFollow() throws Exception{
-        User user = AuthenticationController.CurrentUser();
         User u2 = new User(); userRepository.save(u2);
+        User user = AuthenticationController.CurrentUser();
         this.mockMvc.perform(get("/user/follow?id="+u2.getId())).andExpect(status().isOk());
-        user = AuthenticationController.CurrentUser();
+        user = userRepository.findOne(user.getId());
         assert(user.isFollowing(u2));
     }
 
@@ -65,7 +65,7 @@ public class UserControllerTest {
         User u2 = new User(); userRepository.save(u2);
         user.follow(u2);
         this.mockMvc.perform(get("/user/unfollow?id="+u2.getId())).andExpect(status().isOk());
-        user = AuthenticationController.CurrentUser();
+        user = userRepository.findOne(user.getId());
         assert(!user.isFollowing(u2));
     }
 

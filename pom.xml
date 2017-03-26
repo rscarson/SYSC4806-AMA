@@ -87,6 +87,11 @@
 			<artifactId>spring-security-test</artifactId>
 			<version>4.0.0.RELEASE</version>
 		</dependency>
+		<dependency>
+			<groupId>com.ocpsoft</groupId>
+			<artifactId>ocpsoft-pretty-time</artifactId>
+			<version>1.0.7</version>
+		</dependency>
     </dependencies>
 
 	<build>

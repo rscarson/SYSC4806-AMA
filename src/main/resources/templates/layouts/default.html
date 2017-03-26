@@ -4,6 +4,24 @@
     <meta name="viewport" content="initial-scale=1, maximum-scale=1" />
     <link rel='stylesheet' href='/webjars/bootstrap/3.2.0/css/bootstrap.min.css' />
 
+    <style>
+        .footer {
+            border-top: 1px solid #CCC;
+            margin-top: 5px;
+        }
+
+        .nav-bottom {
+            border-top: 1px solid #e7e7e7;
+        }
+    </style>
+
+    <script type="text/javascript">
+        function inPlaceLink(url) {
+            $.get(url);
+            reload();
+        }
+    </script>
+
     <title th:text="${title}"></title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
@@ -19,19 +37,26 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="/">AMA</a>
+            <a class="navbar-brand" href="/">AMA Tool</a>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <!-- Left menu -->
             <ul class="nav navbar-nav">
-                <li class="active"><a href="/ama">Ongoing AMAs <span class="sr-only">(current)</span></a></li>
-                <li><a href="/ama">Completed AMAs</a></li>
-                <li><a href="#">Following</a></li>
+                <li th:classappend="${page == 'index'}?active">
+                    <a href="/">Ongoing AMAs <span th:if="${page == 'index'}" class="sr-only">(current)</span></a>
+                </li>
+                <li th:classappend="${page == 'completed'}?active">
+                    <a href="/">Completed AMAs <span th:if="${page == 'completed'}" class="sr-only">(current)</span></a>
+                </li>
+                <li th:if="${user != null}" th:classappend="${page == 'following'}?active">
+                    <a href="/following">Following <span th:if="${page == 'following'}" class="sr-only">(current)</span></a>
+                </li>
+                <li th:if="${user != null}" th:classappend="${page == 'new'}?active">
+                    <a href="/ama/new">Submit an AMA <span th:if="${page == 'new'}" class="sr-only">(current)</span></a>
+                </li>
             </ul>
-
-            <a role="button" class="navbar-btn btn btn-default btn-xl" href="/ama/new">Submit an AMA</a>
 
             <!-- Right menu -->
             <ul class="nav navbar-nav navbar-right">
@@ -62,6 +87,9 @@
             </form>
         </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
+    <div class="container-fluid nav-bottom ">
+        <h3 class="navbar-text" th:text="${title}"></h3>
+    </div>
 </nav>
 
 <div class="container">
@@ -69,7 +97,7 @@
         Content
     </div>
 
-    <div class="text-right">
+    <div class="footer text-right">
         <small>Copyright Adam Batson, Richard Carson, Max DeMelo, 2016</small>
     </div>
 </div>

@@ -1,5 +1,6 @@
 package com.sysc4806;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,6 +30,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class UserControllerTest {
 
     @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
     private MockMvc mockMvc;
 
     @Test
@@ -42,6 +46,27 @@ public class UserControllerTest {
     public void shouldGetActiveUser() throws Exception{
         User user = AuthenticationController.CurrentUser();
         this.mockMvc.perform(get("/user/view?id="+user.getId())).andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockUser
+    public void shouldFollow() throws Exception{
+        User u2 = new User(); userRepository.save(u2);
+        User user = AuthenticationController.CurrentUser();
+        this.mockMvc.perform(get("/user/follow?id="+u2.getId())).andExpect(status().isOk());
+        user = userRepository.findOne(user.getId());
+        assert(user.isFollowing(u2));
+    }
+
+    @Test
+    @WithMockUser
+    public void shouldUnfollow() throws Exception{
+        User user = AuthenticationController.CurrentUser();
+        User u2 = new User(); userRepository.save(u2);
+        user.follow(u2);
+        this.mockMvc.perform(get("/user/unfollow?id="+u2.getId())).andExpect(status().isOk());
+        user = userRepository.findOne(user.getId());
+        assert(!user.isFollowing(u2));
     }
 
     @Test

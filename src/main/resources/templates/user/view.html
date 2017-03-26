@@ -3,7 +3,10 @@
 <head></head>
 <body>
 <div class="container" th:fragment="content">
-    <h3>Overview for <span th:remove="tag" th:text="${user.name}"></span></h3>
+    <span th:if="${user != null and user.id != target.id}">
+        <a th:if="${user.isFollowing(target)}" class="btn btn-xs btn-danger" th:href="@{/user/unfollow(id=${target.id})}">Unfollow</a>
+        <a th:unless="${user.isFollowing(target)}" class="btn btn-xs btn-success" th:href="@{/user/follow(id=${target.id})}">Follow</a>
+    </span>
 </div>
 </body>
 </html>

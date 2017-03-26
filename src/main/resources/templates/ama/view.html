@@ -4,21 +4,25 @@
 <body>
 <div class="container" th:fragment="content">
     <div>
-        <h3 th:text="${ama.title}"></h3>
-        <p th:text="${ama.description}"></p>
-        <small class="text-muted">Submitted ### by
-            <a th:href="@{/user/view(id=${ama.poster.id})}"><span th:text="${ama.poster.name}" th:remove="tag"></span></a>
-        </small>
-        <p><small class="text-muted">
-                    <span th:each="tag : ${ama.getTags()}" th:remove="tag">
-                        <a href="#"><span th:text="${tag}" th:remove="tag"></span></a>
-                    </span>
-        </small></p>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title" th:text="${ama.title}"></h3>
+                <small th:each="tag : ${ama.getTags()}">
+                    <a class="text-muted" href="#" th:text="${'#'+tag}"></a>
+                </small>
+            </div>
+            <div class="panel-body" th:if="${ama.description.length() > 0}" th:text="${ama.description}"></div>
+            <div class="panel-footer">
+                <small class="text-muted">Submitted <span th:text="${ama.getFormattedCreated()}" th:remove="tag"></span> by
+                    <span th:replace="fragments/user :: user(${ama.poster})"></span>
+                    <span th:replace="fragments/user :: follow(${user}, ${ama.poster})"></span>
+                </small>
+            </div>
+        </div>
 
         <form action="/comment/new" method="post">
             <input type="hidden" name="postID" th:value="${ama.id}" />
             <div class="form-group">
-                <label for="content">Description</label><br/>
                 <textarea class="form-control" id="content" name="content" placeholder="Content" />
             </div>
             <button type="submit" class="btn btn-default">Comment</button>
@@ -28,7 +32,7 @@
         <span th:each="comment : ${comments}" th:remove="tag">
             <div>
                 <p th:text="${comment.content}"></p>
-                <a th:href="@{/user/view(id=${ama.poster.id})}"><small class="text-muted" th:text="${comment.poster.name}"></small></a>
+                <span th:replace="fragments/user :: user(${comment.poster})"></span>
             </div>
         </span>
     </div>

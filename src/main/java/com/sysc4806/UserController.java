@@ -21,10 +21,37 @@ public class UserController {
         if(u == null){
             throw new ResourceNotFoundException();
         }
-        else{
-            model.addAttribute("title", "Overview for " + AuthenticationController.CurrentUser().getName());
-            model.addAttribute("user", u);
-            return "user/view";
+
+        model.addAttribute("title", "Overview for " + u.getName());
+        model.addAttribute("target", u);
+        return "user/view";
+    }
+
+    @RequestMapping("/user/follow")
+    public String followUser(@RequestParam(value="id")Long user, Model model) {
+        User u = userRepo.findOne(user);
+        if(u == null){
+            throw new ResourceNotFoundException();
         }
+
+        User current = AuthenticationController.CurrentUser();
+        current.follow(u); userRepo.save(current);
+        model.addAttribute("title", "Overview for " + u.getName());
+        model.addAttribute("target", u);
+        return "user/view";
+    }
+
+    @RequestMapping("/user/unfollow")
+    public String unfollowUser(@RequestParam(value="id")Long user, Model model) {
+        User u = userRepo.findOne(user);
+        if(u == null){
+            throw new ResourceNotFoundException();
+        }
+
+        User current = AuthenticationController.CurrentUser();
+        current.unfollow(u); userRepo.save(current);
+        model.addAttribute("title", "Overview for " + u.getName());
+        model.addAttribute("target", u);
+        return "user/view";
     }
 }

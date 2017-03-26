@@ -3,14 +3,25 @@
 <head></head>
 <body>
 <div class="container" th:fragment="content">
-            <span th:each="ama : ${amas}" th:remove="tag">
-                <div>
-                    <a th:href="@{/ama/view(id=${ama.id})}"><h3 th:text="${ama.title}"></h3></a>
-                    <small class="text-muted">Submitted ### by
-                        <a th:href="@{/user/view(id=${ama.poster.id})}"><span th:text="${ama.poster.name}" th:remove="tag"></span></a>
-                    </small>
-                </div>
-            </span>
+    <h3 th:if="${amas.size() == 0}" class="text-center text-muted">Nothing to display</h3>
+    <span th:each="ama : ${amas}" th:remove="tag">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <a th:href="@{/ama/view(id=${ama.id})}">
+                 <h3 th:text="${ama.title}"></h3>
+                </a>
+                <small th:each="tag : ${ama.getTags()}">
+                    <a class="text-muted" href="#" th:text="${'#'+tag}"></a>
+                </small>
+            </div>
+            <div class="panel-footer">
+                <small class="text-muted">Submitted <span th:text="${ama.getFormattedCreated()}" th:remove="tag"></span> by
+                    <span th:replace="fragments/user :: user(${ama.poster})"></span>
+                    <span th:replace="fragments/user :: follow(${ama.poster})"></span>
+                </small>
+            </div>
+        </div>
+    </span>
 </div>
 </body>
 </html>

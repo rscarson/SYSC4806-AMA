@@ -60,7 +60,10 @@ public class PostController {
                              @RequestParam(value="tags") String tags, Model model) {
 
         Post p = new Post(title, AuthenticationController.CurrentUser(), description);
-        p.setTags(new ArrayList<>(Arrays.asList(tags.trim().split(","))));
+        ArrayList<String> tagsTrimmed = new ArrayList<>();
+        for(String s : tags.split(","))
+            tagsTrimmed.add(s.trim());
+        p.setTags(tagsTrimmed);
         postRepo.save(p);
 
         model.addAttribute("ama", p);

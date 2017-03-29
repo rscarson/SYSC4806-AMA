@@ -62,7 +62,7 @@ public class PostController {
         Post p = new Post(title, AuthenticationController.CurrentUser(), description);
         ArrayList<String> tagsTrimmed = new ArrayList<>();
         //Check if tags is empty or all spaces
-        if(!tags.isEmpty() && !tags.matches("( )*")) {
+        if(!tags.isEmpty() && !tags.matches("\\s*")) {
             for (String s : tags.split(","))
                 tagsTrimmed.add(s.trim());
         }

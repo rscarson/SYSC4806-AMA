@@ -1,15 +1,17 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
-    ...
 </head>
 <body>
 <span class="btn-group" role="group" th:fragment="user(target)">
-    <a class="btn btn-xs btn-default" th:href="@{/user/view(id=${target.id})}" th:text="${target.name}"></a>
+    <span class="text-muted" th:if="${target == null}">Deleted User</span>
+    <span th:unless="${target == null}">
+        <a class="btn btn-xs btn-default" th:href="@{/user/view(id=${target.id})}" th:text="${target.name}"></a>
         <span th:if="${user != null and user.id != target.id}">
             <a th:if="${user.isFollowing(target)}" class="btn btn-xs btn-danger" th:href="@{/user/unfollow(id=${target.id})}">Unfollow</a>
             <a th:unless="${user.isFollowing(target)}" class="btn btn-xs btn-success" th:href="@{/user/follow(id=${target.id})}">Follow</a>
         </span>
+    </span>
 </span>
 </body>
 </html>

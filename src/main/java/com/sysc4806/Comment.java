@@ -34,11 +34,14 @@ public class Comment {
     @ManyToOne
     private User poster;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     private List<Comment> children;
 
     @ManyToOne
     private Post post;
+
+    @ManyToOne
+    private Comment parent;
 
     private String content;
     private int votes;
@@ -65,6 +68,9 @@ public class Comment {
         PrettyTime p = new PrettyTime();
         return p.format(created);
     }
+
+    public Comment getParent() { return parent; }
+    public void setParent(Comment parent) { this.parent = parent; }
 
     public long getId(){
         return id;

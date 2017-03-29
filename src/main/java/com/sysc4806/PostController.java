@@ -34,6 +34,7 @@ public class PostController {
         model.addAttribute("amas", postRepo.findAll());
         model.addAttribute("page", "index");
         model.addAttribute("title", "All AMAs");
+
         return "ama/index";
     }
 

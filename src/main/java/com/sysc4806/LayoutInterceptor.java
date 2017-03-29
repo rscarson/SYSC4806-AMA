@@ -1,6 +1,9 @@
 package com.sysc4806;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.stereotype.Controller;
+import org.springframework.util.ClassUtils;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
@@ -11,6 +14,7 @@ import java.security.Principal;
 /**
  * Created by richardcarson3 on 3/18/2017.
  */
+@Controller
 public class LayoutInterceptor extends HandlerInterceptorAdapter {
     private static final String DEFAULT_LAYOUT = "layouts/default";
     private static final String DEFAULT_VIEW_ATTRIBUTE_NAME = "view";

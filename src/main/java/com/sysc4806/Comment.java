@@ -85,7 +85,7 @@ public class Comment {
     public void addChild(Comment child) { children.add(child); }
     public List<Comment> getChildren() { return children; }
 
-    public void setContent(String content) { this.content = content; }
+    public void setContent(String content) { this.content = MarkdownTranslator.translate(content); }
     public String getContent() { return content; }
 
     public Post getPost() { return post; }

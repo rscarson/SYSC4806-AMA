@@ -97,7 +97,7 @@ public class Post {
         return description;
     }
     public void setDescription(String description){
-        this.description = description;
+        this.description = MarkdownTranslator.translate(description);
     }
 
     public void upVote() { votes ++; }

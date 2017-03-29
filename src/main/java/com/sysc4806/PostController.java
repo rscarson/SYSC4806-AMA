@@ -61,8 +61,10 @@ public class PostController {
 
         Post p = new Post(title, AuthenticationController.CurrentUser(), description);
         ArrayList<String> tagsTrimmed = new ArrayList<>();
-        for(String s : tags.split(","))
-            tagsTrimmed.add(s.trim());
+        if(!tags.isEmpty()) {
+            for (String s : tags.split(","))
+                tagsTrimmed.add(s.trim());
+        }
         p.setTags(tagsTrimmed);
         postRepo.save(p);
 

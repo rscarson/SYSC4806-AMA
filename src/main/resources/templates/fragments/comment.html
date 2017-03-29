@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+</head>
+<body>
+<span th:fragment="comment(c, post)">
+    <div class="panel" th:classappend="${c.poster != null and post.poster.id == c.poster.id}?panel-primary:panel-default">
+
+        <!-- comment body -->
+        <div class="panel-body" th:text="${c.content}" th:unless="${c.poster == null}"></div>
+        <div class="panel-body text-muted text-center" th:if="${c.poster == null}">
+            Comment Deleted
+        </div>
+
+        <!-- Reply box -->
+        <div class="panel-body collapse" th:id="${'replycollapse'+c.id}">
+            <form action="/comment/new" method="post">
+                <input type="hidden" name="postID" th:value="${post.id}" />
+                <input type="hidden" name="parentID" th:value="${c.id}" />
+                <div class="form-group">
+                    <textarea class="form-control" id="content" name="content" placeholder="Content" />
+                </div>
+                <button type="submit" class="btn btn-default">Reply</button>
+            </form>
+        </div>
+
+        <!-- Edit box -->
+        <div th:unless="${c.poster == null}" class="panel-body collapse" th:id="${'editcollapse'+c.id}">
+            <form action="/comment/edit" method="post">
+                <input type="hidden" name="postID" th:value="${post.id}" />
+                <input type="hidden" name="commentID" th:value="${c.id}" />
+                <div class="form-group">
+                    <textarea class="form-control" name="content" placeholder="Content" th:text="${c.content}"></textarea>
+                </div>
+                <button type="submit" class="btn btn-default">Save</button>
+            </form>
+        </div>
+
+        <!-- Footer bar -->
+        <div class="panel-footer">
+            <small class="text-muted">Submitted <span th:text="${c.getFormattedCreated()}" th:remove="tag"></span> by
+                <span th:replace="fragments/user :: user(${c.poster})"></span>
+
+                <!-- Reply btn -->
+                <a class="btn btn-xs btn-primary" role="button" data-toggle="collapse"
+                   th:href="${'#replycollapse'+c.id}" aria-expanded="false" th:aria-controls="${'#replycollapse'+c.id}">
+                    Reply
+                </a>
+
+                <!-- Edit btn -->
+                <a th:unless="${c.poster == null}" class="btn btn-xs btn-warning" role="button" data-toggle="collapse"
+                   th:href="${'#editcollapse'+c.id}" aria-expanded="false" th:aria-controls="${'#editcollapse'+c.id}">
+                    Edit
+                </a>
+
+                <!-- Delete btn -->
+                <a th:unless="${c.poster == null}" th:href="@{/comment/delete(commentID=${c.id}, postID=${post.id})}"
+                   class="btn btn-xs btn-danger" role="button" onclick="return confirm('Really delete this comment?')">
+                    Delete
+                </a>
+            </small>
+        </div>
+    </div>
+
+    <div class="comment_chain">
+        <span th:each="child : ${c.children}" th:remove="tag">
+            <span th:replace="fragments/comment :: comment(${child}, ${post})"></span>
+        </span>
+    </div>
+</span>
+</body>
+</html>

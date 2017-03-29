@@ -1,19 +1,16 @@
 package com.sysc4806;
 
+import com.sysc4806.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Created by Richard Carson on 3/21/2017.
  */
 @Controller
 public class CommentController {
-
     @Autowired
     UserRepository userRepository;
 
@@ -36,35 +33,112 @@ public class CommentController {
         return vote(userID, commentID, VoteStatus.Vote.Down);
     }
 
-    @PostMapping("/comment/new")
-    public String postNewComment(@RequestParam(value="postID") long postID, @RequestParam(value="content") String content, Model model){
-        Post parent = postRepository.findOne(postID);
-        Comment c = new Comment();
-        c.setPoster(AuthenticationController.CurrentUser());
-        c.setContent(content);
-        c.setPost(parent);
-        commentRepository.save(c);
+    @GetMapping("/comment/delete")
+    public String postDeleteComment(@RequestParam(value="postID") Long postID, @RequestParam(value="commentID") Long commentID, Model model) {
+        Comment comment = commentRepository.findOne(commentID);
+        if (comment == null) {
+            throw new ResourceNotFoundException();
+        }
 
-        model.addAttribute("title", parent.getTitle());
-        model.addAttribute("ama", parent);
-        model.addAttribute("comments", commentRepository.findByPost(parent));
+        comment.setPoster(null);
+        comment.setContent("");
+        commentRepository.save(comment);
+
+        if (comment.getChildren().size() == 0) {
+            if (comment.getParent() != null) {
+                comment.getParent().getChildren().removeIf(c -> c.getId() == commentID);
+                commentRepository.save(comment.getParent());
+            }
+
+            commentRepository.delete(commentID);
+        }
+
+        Post post = postRepository.findOne(postID);
+        if (post == null) {
+            throw new ResourceNotFoundException();
+        }
+
+        model.addAttribute("title", post.getTitle());
+        model.addAttribute("ama", post);
+        model.addAttribute("comments", commentRepository.findByPost(post));
         return "ama/view";
     }
 
     @PostMapping("/comment/edit")
-    public String postEdit(@RequestParam(value="commentID") long commentID, @RequestParam(value="content") String content, Model model){
-        Comment c = commentRepository.findOne(commentID);
-        c.setContent(content);
-        commentRepository.save(c);
+    public String postEditComment(
+            @RequestParam(value="postID") Long postID,
+            @RequestParam(value="commentID") Long commentID,
+            @RequestParam(value="content") String content,
+            Model model) {
+        if (content.trim().length() > 0) {
+            Comment comment = commentRepository.findOne(commentID);
+            if (comment == null) {
+                throw new ResourceNotFoundException();
+            }
 
-        model.addAttribute("title", c.getPost().getTitle());
-        model.addAttribute("comment", c);
-        return "comment/view";
+            comment.setContent(content);
+            commentRepository.save(comment);
+        }
+
+        Post post = postRepository.findOne(postID);
+        if (post == null) {
+            throw new ResourceNotFoundException();
+        }
+
+        model.addAttribute("title", post.getTitle());
+        model.addAttribute("ama", post);
+        model.addAttribute("comments", commentRepository.findByPost(post));
+        return "ama/view";
+    }
+
+    @PostMapping("/comment/new")
+    public String postNewComment(
+            @RequestParam(value="postID") Long postID,
+            @RequestParam(value = "parentID", required = false) Long parentID,
+            @RequestParam(value="content") String content,
+            Model model){
+        Post post = postRepository.findOne(postID);
+        if (post == null) {
+            throw new ResourceNotFoundException();
+        }
+
+        if (content.trim().length() > 0) {
+            Comment c = new Comment();
+            c.setPoster(AuthenticationController.CurrentUser());
+            c.setContent(content);
+
+
+            Comment parent = null;
+            if (parentID != null) {
+                parent = commentRepository.findOne(parentID);
+                if (parent == null) {
+                    throw new ResourceNotFoundException();
+                }
+
+                c.setParent(parent);
+
+                parent.addChild(c);
+            } else {
+                c.setPost(post);
+            }
+
+            commentRepository.save(c);
+            if (parent != null) commentRepository.save(parent);
+        }
+
+        model.addAttribute("title", post.getTitle());
+        model.addAttribute("ama", post);
+        model.addAttribute("comments", commentRepository.findByPost(post));
+        return "ama/view";
     }
 
     @RequestMapping("comment/view")
     public String viewComment(@RequestParam(value="id") long comment, Model model) {
         Comment c = commentRepository.findOne(comment);
+        if (c == null) {
+            throw new ResourceNotFoundException();
+        }
+
         model.addAttribute("title", c.getPost().getTitle());
         model.addAttribute("comment", c);
         return "comment/view";
@@ -80,6 +154,11 @@ public class CommentController {
     private int vote(long userID, long commentID, VoteStatus.Vote type) {
         Comment comment = commentRepository.findOne(commentID);
         User user = userRepository.findOne(userID);
+
+        if (user == null || comment == null) {
+            throw new ResourceNotFoundException();
+        }
+
         VoteStatus status = voteStatusRepository.findByCommentAndUserAndType(commentID, userID, type);
         if (status == null) {
             status = new VoteStatus();

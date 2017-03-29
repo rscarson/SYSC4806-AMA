@@ -1,20 +1,100 @@
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-<head></head>
-<body>
-<div class="container" th:fragment="content">
-    <h1>An Error Has Occurred</h1>
-    <h2 th:text="${exception}"></h2>
-    <p th:text="${message}"></p>
-    <span th:each="e : ${stackTrace}" th:remove="tag">
-        <p th:text="${e}"></p>
-    </span>
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1" />
+    <link rel='stylesheet' href='/webjars/bootstrap/3.2.0/css/bootstrap.min.css' />
 
-    <h2>Model Contents</h2>
-    <dl th:each="var : ${#vars}">
-        <dt th:text="${var.key}"></dt>
-        <dd th:text="${var.value}"></dd>
-    </dl>
+    <style>
+        .footer {
+            border-top: 1px solid #CCC;
+            margin-top: 5px;
+        }
+
+        .nav-bottom {
+            border-top: 1px solid #e7e7e7;
+        }
+
+        .comment_chain {
+            padding-left: 10px;
+            border-left: 1px solid #e7e7e7;
+        }
+    </style>
+
+    <title th:text="${title}"></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+</head>
+<body>
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">AMA Tool</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <!-- Left menu -->
+            <ul class="nav navbar-nav">
+                <li th:classappend="${page == 'index'}?active">
+                    <a href="/">Ongoing AMAs <span th:if="${page == 'index'}" class="sr-only">(current)</span></a>
+                </li>
+                <li th:classappend="${page == 'completed'}?active">
+                    <a href="/">Completed AMAs <span th:if="${page == 'completed'}" class="sr-only">(current)</span></a>
+                </li>
+                <li th:if="${user != null}" th:classappend="${page == 'following'}?active">
+                    <a href="/following">Following <span th:if="${page == 'following'}" class="sr-only">(current)</span></a>
+                </li>
+                <li th:if="${user != null}" th:classappend="${page == 'new'}?active">
+                    <a href="/ama/new">Submit an AMA <span th:if="${page == 'new'}" class="sr-only">(current)</span></a>
+                </li>
+            </ul>
+            <form class="navbar-form navbar-right form-inline" role="search">
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="Search" />
+                </div>
+                <button type="submit" class="btn btn-default">
+                    <span class="glyphicon glyphicon glyphicon-search"></span>
+                </button>
+            </form>
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+    <div class="container-fluid nav-bottom ">
+        <h3 class="navbar-text" th:text="${title}"></h3>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="container text-center" th:fragment="content">
+        <h1>Something Has Gone Awry!</h1>
+        <p>Try searching below, or contact us if the issue persists.</p>
+        <form class="form-horizontal" role="search">
+            <div class="form-group">
+                <span class="col-sm-3" />
+                <div class="input-group col-sm-6">
+                    <input type="text" class="form-control" placeholder="Search" />
+                    <span class="input-group-btn">
+                        <button type="submit" class="btn btn-default">
+                            <span class="glyphicon glyphicon glyphicon-search"></span>
+                        </button>
+                    </span>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="footer text-right">
+        <small>Copyright Adam Batson, Richard Carson, Max DeMelo, 2016</small>
+    </div>
 </div>
+
+<script type="text/javascript" src="/webjars/jquery/2.1.1/jquery.min.js"></script>
+<script type="text/javascript" src="/webjars/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 </body>
 </html>

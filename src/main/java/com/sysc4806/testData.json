@@ -1,0 +1,9 @@
+{
+  "Post" : {
+    "title" : "AMA1",
+    "poster" : {
+      "email" : "123@notanEmail.com"
+    },
+    "description" : "First AMA"
+  }
+}

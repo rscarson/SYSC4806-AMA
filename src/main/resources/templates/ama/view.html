@@ -23,7 +23,12 @@
         <form action="/comment/new" method="post">
             <input type="hidden" name="postID" th:value="${ama.id}" />
             <div class="form-group">
-                <textarea class="form-control" id="content" name="content" placeholder="Content" />
+                <small class="text-muted">
+                    Markdown syntax is supported here. Click
+                    <a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet" target="_blank" rel="noopener">here</a>
+                    for details.
+                </small>
+                <textarea class="form-control" id="content" name="content" />
             </div>
             <button type="submit" class="btn btn-default">Comment</button>
         </form>

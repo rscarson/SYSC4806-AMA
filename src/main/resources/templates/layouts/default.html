@@ -25,6 +25,15 @@
             $.get(url);
             reload();
         }
+
+        function title_not_empty() {
+            if ($("#title").val().trim().length == 0) {
+                $("#titleError").css("display", "");
+                return false;
+            }
+
+            return true;
+        }
     </script>
 
     <title th:text="${title}"></title>

@@ -43,6 +43,10 @@ public class Comment {
     @ManyToOne
     private Comment parent;
 
+    @Column(columnDefinition = "TEXT")
+    private String source;
+
+    @Column(columnDefinition = "TEXT")
     private String content;
     private int votes;
 
@@ -85,8 +89,9 @@ public class Comment {
     public void addChild(Comment child) { children.add(child); }
     public List<Comment> getChildren() { return children; }
 
-    public void setContent(String content) { this.content = content; }
+    public void setContent(String content) { this.source = content; this.content = MarkdownTranslator.translate(content); }
     public String getContent() { return content; }
+    public String getSource() { return source; }
 
     public Post getPost() { return post; }
     public void setPost(Post post) { this.post = post; }

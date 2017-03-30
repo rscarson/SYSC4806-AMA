@@ -4,20 +4,30 @@
 <head>...</head>
 <body>
 <div class="container" th:fragment="content">
-    <form action="/ama/new" method="post">
+    <form action="/ama/new" method="post" onsubmit="return title_not_empty()">
         <div class="form-group">
+            <div class="alert alert-danger alert-dismissible" role="alert" id="titleError" style="display:none;">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <strong>Error:</strong> Title cannot be empty
+            </div>
+
             <label for="title">Title</label><br/>
             <input type="text" class="form-control" id="title" name="title" placeholder="Title" />
         </div>
         <div class="form-group">
             <label for="description">Description</label><br/>
+            <small class="text-muted">
+                Markdown syntax is supported here. Click
+                <a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet" target="_blank" rel="noopener">here</a>
+                for details.
+            </small>
             <textarea class="form-control" id="description" name="description" placeholder="Description" />
         </div>
         <div class="form-group">
             <label for="tags">Comma separated tags</label><br/>
             <input type="text" class="form-control" id="tags" name="tags" placeholder="Tags" />
         </div>
-        <button type="submit" class="btn btn-default">Submit</button>
+        <input type="submit" class="btn btn-default" />
     </form>
 </div>
 </body>

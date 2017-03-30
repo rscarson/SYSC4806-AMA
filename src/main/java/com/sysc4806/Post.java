@@ -40,6 +40,7 @@ public class Post {
     @ManyToOne
     private User poster;
 
+    @Column(columnDefinition = "TEXT")
     private String description;
 
     private ArrayList<String> tags;
@@ -54,9 +55,9 @@ public class Post {
     public Post(String title, User poster, String description){
         this();
 
-        this.title = title;
-        this.poster = poster;
-        this.description = description;
+        setTitle(title);
+        setPoster(poster);
+        setDescription(description);
     }
 
     public Date getUpdated() { return updated; }
@@ -97,7 +98,7 @@ public class Post {
         return description;
     }
     public void setDescription(String description){
-        this.description = description;
+        this.description = MarkdownTranslator.translate(description);
     }
 
     public void upVote() { votes ++; }

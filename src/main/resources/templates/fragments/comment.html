@@ -7,30 +7,42 @@
     <div class="panel" th:classappend="${c.poster != null and post.poster.id == c.poster.id}?panel-primary:panel-default">
 
         <!-- comment body -->
-        <div class="panel-body" th:text="${c.content}" th:unless="${c.poster == null}"></div>
+        <div class="panel-body" th:utext="${c.content}" th:unless="${c.poster == null}"></div>
         <div class="panel-body text-muted text-center" th:if="${c.poster == null}">
             Comment Deleted
         </div>
 
         <!-- Reply box -->
-        <div class="panel-body collapse" th:id="${'replycollapse'+c.id}">
+        <div class="panel-footer collapse" role="tabpanel" th:id="${'replycollapse'+c.id}">
+            <h4>Reply to comment</h4>
             <form action="/comment/new" method="post">
                 <input type="hidden" name="postID" th:value="${post.id}" />
                 <input type="hidden" name="parentID" th:value="${c.id}" />
                 <div class="form-group">
-                    <textarea class="form-control" id="content" name="content" placeholder="Content" />
+                    <small class="text-muted">
+                        Markdown syntax is supported here. Click
+                        <a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet" target="_blank" rel="noopener">here</a>
+                        for details.
+                    </small>
+                    <textarea class="form-control" id="content" name="content" />
                 </div>
                 <button type="submit" class="btn btn-default">Reply</button>
             </form>
         </div>
 
         <!-- Edit box -->
-        <div th:unless="${c.poster == null}" class="panel-body collapse" th:id="${'editcollapse'+c.id}">
+        <div th:unless="${c.poster == null}" role="tabpanel" class="panel-footer collapse" th:id="${'editcollapse'+c.id}">
+            <h4>Edit comment</h4>
             <form action="/comment/edit" method="post">
                 <input type="hidden" name="postID" th:value="${post.id}" />
                 <input type="hidden" name="commentID" th:value="${c.id}" />
                 <div class="form-group">
-                    <textarea class="form-control" name="content" placeholder="Content" th:text="${c.content}"></textarea>
+                    <small class="text-muted">
+                        Markdown syntax is supported here. Click
+                        <a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet" target="_blank" rel="noopener">here</a>
+                        for details.
+                    </small>
+                    <textarea class="form-control" name="content" th:text="${c.source}"></textarea>
                 </div>
                 <button type="submit" class="btn btn-default">Save</button>
             </form>

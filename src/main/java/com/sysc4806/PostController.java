@@ -60,6 +60,9 @@ public class PostController {
                              @RequestParam(value="description") String description,
                              @RequestParam(value="tags") String tags, Model model) {
 
+        if (title.trim().length() == 0)
+            throw new ResourceNotFoundException();
+
         Post p = new Post(title, AuthenticationController.CurrentUser(), description);
         ArrayList<String> tagsTrimmed = new ArrayList<>();
         //Check if tags is empty or all spaces

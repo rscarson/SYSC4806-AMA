@@ -25,10 +25,10 @@ public class MarkdownTranslatorTest {
     @Test
     public void testSuperscript() {
         Assert.assertEquals("<p><sup>test</sup></p>\n",
-                MarkdownTranslator.translate("^test"));
+                MarkdownTranslator.translate("^test^"));
 
         Assert.assertEquals("<p><sup><sup>test</sup></sup></p>\n",
-                MarkdownTranslator.translate("^^test"));
+                MarkdownTranslator.translate("^^test^^"));
     }
 
     @Test

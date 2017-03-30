@@ -23,6 +23,15 @@ public class MarkdownTranslatorTest {
     }
 
     @Test
+    public void testSuperscript() {
+        Assert.assertEquals("<p><sup>test</sup></p>\n",
+                MarkdownTranslator.translate("^test"));
+
+        Assert.assertEquals("<p><sup><sup>test</sup></sup></p>\n",
+                MarkdownTranslator.translate("^^test"));
+    }
+
+    @Test
     public void testLinks() {
         Assert.assertEquals("<p><a href=\"#\">test</a></p>\n",
                 MarkdownTranslator.translate("[test](#)"));

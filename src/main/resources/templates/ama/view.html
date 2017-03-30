@@ -11,7 +11,7 @@
                     <a class="text-muted" href="#" th:text="${'#'+tag}"></a>
                 </small>
             </div>
-            <div class="panel-body" th:if="${ama.description.length() > 0}" th:text="${ama.description}"></div>
+            <div class="panel-body" th:if="${ama.description.length() > 0}" th:utext="${ama.description}"></div>
             <div class="panel-footer">
                 <small class="text-muted">Submitted <span th:text="${ama.getFormattedCreated()}" th:remove="tag"></span> by
                     <span th:replace="fragments/user :: user(${ama.poster})"></span>

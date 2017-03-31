@@ -2,6 +2,11 @@ package com.sysc4806;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
 
@@ -10,29 +15,38 @@ import static org.junit.Assert.assertEquals;
 /**
  * Created by adambatson on 3/20/2017.
  */
+@RunWith(SpringRunner.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@AutoConfigureMockMvc
 public class CommentTest {
 
     private Post post;
     private Comment comment;
 
     @Before
+    @WithMockUser
     public void setUp() {
-        post = new Post();
-        comment = new Comment(post, "Hello!");
+        comment = new Comment(AuthenticationController.CurrentUser(), "Hello!");
     }
 
     @Test
+    @WithMockUser
     public void testUpvote() {
+        assertEquals(1, comment.getVotes());
+        comment.upVote(AuthenticationController.CurrentUser());
         assertEquals(0, comment.getVotes());
-        comment.upVote();
+        comment.upVote(AuthenticationController.CurrentUser());
         assertEquals(1, comment.getVotes());
     }
 
     @Test
+    @WithMockUser
     public void testDownvote() {
-        assertEquals(0, comment.getVotes());
-        comment.downVote();
+        assertEquals(1, comment.getVotes());
+        comment.downVote(AuthenticationController.CurrentUser());
         assertEquals(-1, comment.getVotes());
+        comment.downVote(AuthenticationController.CurrentUser());
+        assertEquals(0, comment.getVotes());
     }
 
     @Test

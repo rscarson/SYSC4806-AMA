@@ -11,4 +11,5 @@ import java.util.List;
 @Repository
 public interface PostRepository extends CrudRepository<Post, Long> {
     public List<Post> findByPoster(User poster);
+    public List<Post> findByPosterIsNotNull();
 }

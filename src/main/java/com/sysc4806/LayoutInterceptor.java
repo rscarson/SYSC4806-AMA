@@ -29,6 +29,9 @@ public class LayoutInterceptor extends HandlerInterceptorAdapter {
         modelAndView.addObject("user", user);
 
         String originalViewName = modelAndView.getViewName();
+        if (originalViewName.startsWith("forward:") || originalViewName.startsWith("redirect:"))
+            return;
+
         modelAndView.setViewName(DEFAULT_LAYOUT);
         modelAndView.addObject(DEFAULT_VIEW_ATTRIBUTE_NAME, originalViewName);
     }

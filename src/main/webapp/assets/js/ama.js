@@ -80,3 +80,11 @@ function bindSortDropDown() {
 $(document).ready(function () {
     bindSortDropDown();
 });
+
+$("#JumpComment").on('click', function () {
+    window.location.href="#JumpAMA";
+});
+
+$("#JumpAMA").on('click', function() {
+    window.location.href="#JumpComment";
+});

@@ -7,7 +7,12 @@
         <a th:if="${user.isFollowing(target)}" class="btn btn-xs btn-danger" th:href="@{/user/unfollow(id=${target.id})}">Unfollow</a>
         <a th:unless="${user.isFollowing(target)}" class="btn btn-xs btn-success" th:href="@{/user/follow(id=${target.id})}">Follow</a>
     </span>
-    <h3>AMA's by this User</h3>
+    <h3>AMA's by this User
+        <a class="btn btn-xs btn-primary" role="button" data-toggle="collapse" id="JumpAMA"
+           aria-expanded="false">
+            Jump To Comments
+        </a>
+    </h3>
     <span th:each="ama : ${posts}" th:remove="tag">
         <div class="panel panel-default">
             <div class="panel-body row">
@@ -52,7 +57,12 @@
             </div>
         </div>
     </span>
-    <h3>Comments by this User</h3>
+    <h3>Comments by this User
+        <a class="btn btn-xs btn-primary" role="button" data-toggle="collapse" id="JumpComment"
+           aria-expanded="false">
+            Jump To AMA's
+        </a>
+    </h3>
     <span th:each="comment : ${comments}" th:remove="tag">
             <span th:replace="fragments/userpagecomment :: comment(${comment}, ${comment.post})"></span>
     </span>

@@ -148,25 +148,22 @@ public class PostController {
                 model.addAttribute("title", p.getTitle());
                 model.addAttribute("page", "view");
                 if(sortby != null) { //Sort the comments
-
-                    if (sortby.equals("upvotes")) {
-
-                        model.addAttribute("comments", commentRepo.findByPostAndParentOrderByVotesDesc(p, null));
-
-                    } else if(sortby.equals("newest")) {
-
-                        model.addAttribute("comments", commentRepo.findByPostAndParentOrderByCreatedDesc(p, null));
-
-                    } else if(sortby.equals("oldest")) {
-
-                        model.addAttribute("comments", commentRepo.findByPostAndParentOrderByCreatedAsc(p, null));
-                    }
-                    else if(sortby.equals("downvotes")) {
-
-                        model.addAttribute("comments", commentRepo.findByPostAndParentOrderByVotesAsc(p, null));
-
-                    } else { //Unknow sort method just use default
-                        model.addAttribute("comments", commentRepo.findByPostAndParent(p, null));
+                    switch(sortby) {
+                        case "upvotes":
+                            model.addAttribute("comments", commentRepo.findByPostAndParentOrderByVotesDesc(p, null));
+                            break;
+                        case "newest":
+                            model.addAttribute("comments", commentRepo.findByPostAndParentOrderByCreatedDesc(p, null));
+                            break;
+                        case "oldest":
+                            model.addAttribute("comments", commentRepo.findByPostAndParentOrderByCreatedAsc(p, null));
+                            break;
+                        case "downvotes":
+                            model.addAttribute("comments", commentRepo.findByPostAndParentOrderByVotesAsc(p, null));
+                            break;
+                        default:
+                            model.addAttribute("comments", commentRepo.findByPostAndParent(p, null));
+                            break;
                     }
                 } else
                     model.addAttribute("comments", commentRepo.findByPostAndParent(p, null));

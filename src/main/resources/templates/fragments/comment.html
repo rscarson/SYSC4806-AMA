@@ -4,10 +4,37 @@
 </head>
 <body>
 <span th:fragment="comment(c, post)">
-    <div class="panel" th:classappend="${c.poster != null and post.poster.id == c.poster.id}?panel-primary:panel-default">
+    <div class="panel" th:classappend="${c.poster != null and post.poster != null and post.poster.id == c.poster.id}?panel-primary:panel-default">
 
         <!-- comment body -->
-        <div class="panel-body" th:utext="${c.content}" th:unless="${c.poster == null}"></div>
+        <div class="panel-body row" th:unless="${c.poster == null}">
+            <div class="col-xs-1 vote-right">
+                <div class="row vcenter">
+                    <div class="col-md-6">
+                        <p class="votep">
+                            <a class="btn btn-xs" th:attr="data-id=${c.id}" th:id="${'commentup'+c.id}" onclick="vote('/comment/up', 'comment', this)"
+                               th:classappend="${c.hasUpVoted(user)}?'active btn-success':'btn-default'">
+                                <span class="text-success glyphicon glyphicon-triangle-top"></span>
+                            </a>
+                        </p>
+                        <p class="votep">
+                            <a class="btn btn-xs" th:attr="data-id=${c.id}" th:id="${'commentdn'+c.id}" onclick="vote('/comment/down', 'comment', this)"
+                               th:classappend="${c.hasDownVoted(user)}?'active btn-danger':'btn-default'">
+                                <span class="text-danger glyphicon glyphicon-triangle-bottom"></span>
+                            </a>
+                        </p>
+                    </div>
+                    <div class="col-md-6" th:id="${'commentcount'+c.id}">
+                        <h4 th:if="${c.votes &lt; 0}" class="text-danger" th:text="${c.votes}"></h4>
+                        <h4 th:if="${c.votes == 0}" th:text="${c.votes}"></h4>
+                        <h4  th:if="${c.votes &gt; 0}" class="text-success" th:text="${c.votes}"></h4>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-11" th:utext="${c.content}"></div>
+        </div>
+
         <div class="panel-body text-muted text-center" th:if="${c.poster == null}">
             Comment Deleted
         </div>
@@ -31,7 +58,7 @@
         </div>
 
         <!-- Edit box -->
-        <div th:unless="${c.poster == null}" role="tabpanel" class="panel-footer collapse" th:id="${'editcollapse'+c.id}">
+        <div th:unless="${c.poster == null or user == null or c.poster.id != user.id}" role="tabpanel" class="panel-footer collapse" th:id="${'editcollapse'+c.id}">
             <h4>Edit comment</h4>
             <form action="/comment/edit" method="post">
                 <input type="hidden" name="postID" th:value="${post.id}" />
@@ -60,13 +87,13 @@
                 </a>
 
                 <!-- Edit btn -->
-                <a th:unless="${c.poster == null}" class="btn btn-xs btn-warning" role="button" data-toggle="collapse"
+                <a th:unless="${c.poster == null or user == null or c.poster.id != user.id}" class="btn btn-xs btn-warning" role="button" data-toggle="collapse"
                    th:href="${'#editcollapse'+c.id}" aria-expanded="false" th:aria-controls="${'#editcollapse'+c.id}">
                     Edit
                 </a>
 
                 <!-- Delete btn -->
-                <a th:unless="${c.poster == null}" th:href="@{/comment/delete(commentID=${c.id}, postID=${post.id})}"
+                <a th:unless="${c.poster == null or user == null or c.poster.id != user.id}" th:href="@{/comment/delete(commentID=${c.id}, postID=${post.id})}"
                    class="btn btn-xs btn-danger" role="button" onclick="return confirm('Really delete this comment?')">
                     Delete
                 </a>

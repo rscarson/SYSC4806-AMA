@@ -3,10 +3,8 @@ package com.sysc4806;
 import com.ocpsoft.pretty.time.PrettyTime;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Created by adambatson on 3/20/2017.
@@ -40,6 +38,12 @@ public class Comment {
     @ManyToOne
     private Post post;
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    private Set<User> upVoters;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    private Set<User> dnVoters;
+
     @ManyToOne
     private Comment parent;
 
@@ -52,11 +56,21 @@ public class Comment {
 
     public Comment(Post post, String content) {
         this();
-        this.content = content;
+        setPost(post);
+        setContent(content);
+    }
+
+    public Comment(User poster, String content) {
+        this();
+        setPoster(poster);
+        setContent(content);
+        upVote(AuthenticationController.CurrentUser());
     }
 
     public Comment() {
         children = new ArrayList<>();
+        upVoters = new HashSet<>();
+        dnVoters = new HashSet<>();
         votes = 0;
     }
 
@@ -89,14 +103,63 @@ public class Comment {
     public void addChild(Comment child) { children.add(child); }
     public List<Comment> getChildren() { return children; }
 
-    public void setContent(String content) { this.source = content; this.content = MarkdownTranslator.translate(content); }
     public String getContent() { return content; }
     public String getSource() { return source; }
+    public void setContent(String content) {
+        this.source = content;
+        this.content = MarkdownTranslator.translate(content);
+    }
 
     public Post getPost() { return post; }
     public void setPost(Post post) { this.post = post; }
 
+    public boolean hasUpVoted(User u) { return u != null && upVoters.stream().filter(v -> v.getId() == u.getId()).collect(Collectors.toList()).size() > 0; }
+    public void clearUpVotes(User u) {
+        Iterator<User> i = upVoters.iterator();
+        while (i.hasNext()) {
+            User f = i.next();
+            if (f.getId() == u.getId()) {
+                i.remove();
+                votes --;
+            }
+        }
+    }
+    public void upVote(User u) {
+        if (u == null || poster == null)
+            return;
+
+        clearDownVotes(u);
+        if (hasUpVoted(u)) {
+            clearUpVotes(u);
+        } else {
+            upVoters.add(u);
+            votes ++;
+        }
+    }
+
+    public boolean hasDownVoted(User u) { return u != null && dnVoters.stream().filter(v -> v.getId() == u.getId()).collect(Collectors.toList()).size() > 0; }
+    public void clearDownVotes(User u) {
+        Iterator<User> i = dnVoters.iterator();
+        while (i.hasNext()) {
+            User f = i.next();
+            if (f.getId() == u.getId()) {
+                i.remove();
+                votes ++;
+            }
+        }
+    }
+    public void downVote(User u) {
+        if (u == null)
+            return;
+
+        clearUpVotes(u);
+        if (hasDownVoted(u)) {
+            clearDownVotes(u);
+        } else {
+            dnVoters.add(u);
+            votes --;
+        }
+    }
+
     public int getVotes() { return votes; }
-    public void upVote() { votes ++; }
-    public void downVote() { votes --; }
 }

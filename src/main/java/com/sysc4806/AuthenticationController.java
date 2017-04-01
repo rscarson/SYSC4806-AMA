@@ -53,7 +53,12 @@ public class AuthenticationController extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
         http.antMatcher("/**").authorizeRequests()
-            .antMatchers("/", "/login**", "/completed", "/ama/view**", "/user/view**", "/comment/view**", "/webjars/**").permitAll()
+            .antMatchers(
+                    "/", "/login**", "/completed",
+                    "/ama/view**", "/user/view**",
+                    "/comment/view**",
+                    "/webjars/**", "/assets/**"
+            ).permitAll()
             .anyRequest().authenticated()
             .and().logout().logoutSuccessUrl("/").permitAll();
     }

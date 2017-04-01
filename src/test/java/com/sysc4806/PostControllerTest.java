@@ -11,6 +11,8 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.List;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -26,6 +28,9 @@ public class PostControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @Autowired
+    private PostRepository postRepository;
 
     @Test
     @WithMockUser
@@ -43,13 +48,13 @@ public class PostControllerTest {
     @WithMockUser
     public void shouldCreateANewPost() throws Exception {
         mockMvc.perform(post("/ama/new")
-                    .param("username", "adambatson")
                     .param("title", "new AMA")
                     .param("description", "Ask me Anything!")
                     .param("tags", "AMA, X, Y, adam"))
-                .andExpect(status().isOk())
                 .andReturn();
 
+        List<Post> posts = postRepository.findByPosterIsNotNull();
+        assert(posts.size() != 0);
     }
 
     @Test

@@ -15,22 +15,31 @@ public class CommentController {
     UserRepository userRepository;
 
     @Autowired
-    VoteStatusRepository voteStatusRepository;
-
-    @Autowired
     CommentRepository commentRepository;
 
     @Autowired
     PostRepository postRepository;
 
     @RequestMapping("/comment/up")
-    public @ResponseBody int upVote(@RequestParam(value="userID")long userID, @RequestParam(value="commentID")long commentID){
-        return vote(userID, commentID, VoteStatus.Vote.Up);
+    public @ResponseBody VoteParameters upVote(@RequestParam(value="id")long id) {
+        Comment comment = commentRepository.findOne(id);
+        if (comment == null)
+            throw new ResourceNotFoundException();
+
+        comment.upVote(AuthenticationController.CurrentUser());
+        commentRepository.save(comment);
+        return new VoteParameters(comment);
     }
 
     @RequestMapping("/comment/down")
-    public @ResponseBody int downVote(@RequestParam(value="userID")long userID, @RequestParam(value="commentID")long commentID){
-        return vote(userID, commentID, VoteStatus.Vote.Down);
+    public @ResponseBody VoteParameters downVote(@RequestParam(value="id")long id) {
+        Comment comment = commentRepository.findOne(id);
+        if (comment == null)
+            throw new ResourceNotFoundException();
+
+        comment.downVote(AuthenticationController.CurrentUser());
+        commentRepository.save(comment);
+        return new VoteParameters(comment);
     }
 
     @GetMapping("/comment/delete")
@@ -58,10 +67,7 @@ public class CommentController {
             throw new ResourceNotFoundException();
         }
 
-        model.addAttribute("title", post.getTitle());
-        model.addAttribute("ama", post);
-        model.addAttribute("comments", commentRepository.findByPost(post));
-        return "ama/view";
+        return "redirect:/ama/view?id="+new Long(post.getId()).toString();
     }
 
     @PostMapping("/comment/edit")
@@ -85,10 +91,7 @@ public class CommentController {
             throw new ResourceNotFoundException();
         }
 
-        model.addAttribute("title", post.getTitle());
-        model.addAttribute("ama", post);
-        model.addAttribute("comments", commentRepository.findByPost(post));
-        return "ama/view";
+        return "redirect:/ama/view?id="+new Long(post.getId()).toString();
     }
 
     @PostMapping("/comment/new")
@@ -103,10 +106,8 @@ public class CommentController {
         }
 
         if (content.trim().length() > 0) {
-            Comment c = new Comment();
-            c.setPoster(AuthenticationController.CurrentUser());
-            c.setContent(content);
-
+            Comment c = new Comment(AuthenticationController.CurrentUser(), content);
+            c.setPost(post);
 
             Comment parent = null;
             if (parentID != null) {
@@ -116,20 +117,14 @@ public class CommentController {
                 }
 
                 c.setParent(parent);
-
                 parent.addChild(c);
-            } else {
-                c.setPost(post);
             }
 
             commentRepository.save(c);
-            if (parent != null) commentRepository.save(parent);
+            if (parentID != null) commentRepository.save(parent);
         }
 
-        model.addAttribute("title", post.getTitle());
-        model.addAttribute("ama", post);
-        model.addAttribute("comments", commentRepository.findByPost(post));
-        return "ama/view";
+        return "redirect:/ama/view?id="+new Long(post.getId()).toString();
     }
 
     @RequestMapping("comment/view")
@@ -142,34 +137,5 @@ public class CommentController {
         model.addAttribute("title", c.getPost().getTitle());
         model.addAttribute("comment", c);
         return "comment/view";
-    }
-
-    /**
-     * Vote on a comment
-     * @param userID The source user
-     * @param commentID The target
-     * @param type Type of vote to apply / remove
-     * @return New vote count
-     */
-    private int vote(long userID, long commentID, VoteStatus.Vote type) {
-        Comment comment = commentRepository.findOne(commentID);
-        User user = userRepository.findOne(userID);
-
-        if (user == null || comment == null) {
-            throw new ResourceNotFoundException();
-        }
-
-        VoteStatus status = voteStatusRepository.findByCommentAndUserAndType(commentID, userID, type);
-        if (status == null) {
-            status = new VoteStatus();
-            status.setComment(comment); status.setUser(user); status.setType(type);
-            voteStatusRepository.save(status);
-            if (type == VoteStatus.Vote.Up) comment.upVote(); else comment.downVote();
-        } else {
-            voteStatusRepository.delete(status);
-            if (type == VoteStatus.Vote.Up) comment.downVote(); else comment.upVote();
-        }
-
-        return comment.getVotes();
     }
 }

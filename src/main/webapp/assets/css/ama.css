@@ -1,0 +1,30 @@
+.footer {
+    border-top: 1px solid #CCC;
+    margin-top: 5px;
+}
+
+.nav-bottom {
+    border-top: 1px solid #e7e7e7;
+}
+
+.comment_chain {
+    padding-left: 10px;
+    border-left: 1px solid #e7e7e7;
+}
+
+.vote-right {
+    border-right: 1px solid #e7e7e7;
+}
+
+.vcenter {
+    display: flex;
+    align-items: center;
+}
+
+.votep {
+    margin: 5px;
+}
+
+a:hover {
+    text-decoration: none;
+}

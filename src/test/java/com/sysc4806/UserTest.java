@@ -10,6 +10,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by Richard on 3/23/2017.
  */
@@ -32,6 +35,7 @@ public class UserTest {
     @WithMockUser
     public void shouldFollow() {
         User u2 = new User(); userRepository.save(u2);
+        u1.getFollowing().clear();
         u1.follow(u2);
 
         Assert.assertEquals(1, u1.getFollowing().size());
@@ -41,6 +45,7 @@ public class UserTest {
     @WithMockUser
     public void uniqueFollowing() {
         User u2 = new User(); userRepository.save(u2);
+        u1.getFollowing().clear();
         u1.follow(u2);
         u1.follow(u2);
 
@@ -51,6 +56,7 @@ public class UserTest {
     @WithMockUser
     public void shouldUnfollow() {
         User u2 = new User(); userRepository.save(u2);
+        u1.getFollowing().clear();
         u1.follow(u2);
         u1.unfollow(u2);
 

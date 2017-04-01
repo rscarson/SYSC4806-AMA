@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-<head></head>
+<head>
+</head>
 <body>
 <div class="container" th:fragment="content">
     <div>
@@ -105,6 +106,14 @@
         </div>
 
         <h3>Comments</h3>
+        <p> Sort by:
+           <select id="sortby">
+                <option value="oldest">Oldest First</option>
+                <option value="newest">Newest First</option>
+                <option value="upvotes">Most Upvoted</option>
+                <option value="downvotes">Most Downvoted</option>
+            </select>
+        </p>
         <span th:each="comment : ${comments}" th:remove="tag">
             <span th:replace="fragments/comment :: comment(${comment}, ${ama})"></span>
         </span>

@@ -18,4 +18,6 @@ public interface CommentRepository  extends CrudRepository<Comment, Long> {
 
     public List<Comment> findByPostAndParentOrderByCreatedAsc(Post post, Comment parent);
 
+    public List<Comment> findByPoster(User poster);
+
 }

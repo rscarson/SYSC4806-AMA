@@ -15,9 +15,17 @@ public class UserController {
     @Autowired
     UserRepository userRepo;
 
+    @Autowired
+    PostRepository postRepo;
+
+    @Autowired
+    CommentRepository commentRepo;
+
     @RequestMapping("/user/view")
     public String viewUser(@RequestParam(value="id")Long user, Model model){
         User u = userRepo.findOne(user);
+        model.addAttribute("posts", postRepo.findByPoster(u));
+        model.addAttribute("comments", commentRepo.findByPoster(u));
         if(u == null){
             throw new ResourceNotFoundException();
         }

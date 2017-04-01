@@ -45,3 +45,38 @@ function vote(url, prefix, self) {
         count.html($counter);
     });
 }
+
+$.urlParam = function(name){
+    var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+    if (results==null){
+        return null;
+    }
+    else{
+        return results[1] || 0;
+    }
+}
+
+/**
+ * Drop down has to be rebound on every page load
+ */
+function bindSortDropDown() {
+    $("#sortby").on('change', function() {
+        //alert("Value = " + $("#sortby").val());
+        //alert("ID = " + $.urlParam("id"));
+        var oldVal = $("#sortby").val();
+        $.ajax({
+            url: "/ama/view?id=" + $.urlParam("id") + "&sortby=" + $("#sortby").val(),
+            content: document.body,
+            success: function (result) {
+                document.body.innerHTML = result;
+                bindSortDropDown();
+                //Set the drop down to the current sort val
+                $("#sortby").val(oldVal);
+            }
+        });
+    });
+}
+
+$(document).ready(function () {
+    bindSortDropDown();
+});

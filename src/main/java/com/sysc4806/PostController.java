@@ -136,7 +136,9 @@ public class PostController {
     }
 
     @RequestMapping("/ama/view")
-    public String viewAMA(@RequestParam(value="id", required = false) Long ama, @RequestParam(value="comment", required = false) Long comment, Model model) {
+    public String viewAMA(@RequestParam(value="id", required = false) Long ama,
+                          @RequestParam(value="comment", required = false) Long comment, Model model,
+                          @RequestParam(value="sortby", required = false) String sortby) {
         if (ama != null) {
             Post p = postRepo.findOne(ama);
             if (p == null) {
@@ -145,7 +147,29 @@ public class PostController {
                 model.addAttribute("ama", p);
                 model.addAttribute("title", p.getTitle());
                 model.addAttribute("page", "view");
-                model.addAttribute("comments", commentRepo.findByPostAndParent(p, null));
+                if(sortby != null) { //Sort the comments
+
+                    if (sortby.equals("upvotes")) {
+
+                        model.addAttribute("comments", commentRepo.findByPostAndParentOrderByVotesDesc(p, null));
+
+                    } else if(sortby.equals("newest")) {
+
+                        model.addAttribute("comments", commentRepo.findByPostAndParentOrderByCreatedDesc(p, null));
+
+                    } else if(sortby.equals("oldest")) {
+
+                        model.addAttribute("comments", commentRepo.findByPostAndParentOrderByCreatedAsc(p, null));
+                    }
+                    else if(sortby.equals("downvotes")) {
+
+                        model.addAttribute("comments", commentRepo.findByPostAndParentOrderByVotesAsc(p, null));
+
+                    } else { //Unknow sort method just use default
+                        model.addAttribute("comments", commentRepo.findByPostAndParent(p, null));
+                    }
+                } else
+                    model.addAttribute("comments", commentRepo.findByPostAndParent(p, null));
             }
         } else if (comment != null) {
             Comment c = commentRepo.findOne(comment);

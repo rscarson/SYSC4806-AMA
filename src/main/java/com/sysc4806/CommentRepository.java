@@ -9,4 +9,13 @@ import java.util.List;
  */
 public interface CommentRepository  extends CrudRepository<Comment, Long> {
     public List<Comment> findByPostAndParent(Post post, Comment parent);
+
+    public List<Comment> findByPostAndParentOrderByVotesAsc(Post post, Comment parent);
+
+    public List<Comment> findByPostAndParentOrderByVotesDesc(Post post, Comment parent);
+
+    public List<Comment> findByPostAndParentOrderByCreatedDesc(Post post, Comment parent);
+
+    public List<Comment> findByPostAndParentOrderByCreatedAsc(Post post, Comment parent);
+
 }

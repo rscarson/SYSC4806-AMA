@@ -57,9 +57,9 @@ $.urlParam = function(name){
 }
 
 /**
- * Drop down has to be rebound on every page load
+ * Drop downs has to be rebound on every page load
  */
-function bindSortDropDown() {
+function bindSortDropDowns() {
     $("#sortby").on('change', function() {
         //alert("Value = " + $("#sortby").val());
         //alert("ID = " + $.urlParam("id"));
@@ -69,14 +69,43 @@ function bindSortDropDown() {
             content: document.body,
             success: function (result) {
                 document.body.innerHTML = result;
-                bindSortDropDown();
+                bindSortDropDowns();
+                bindJumpButtons();
                 //Set the drop down to the current sort val
                 $("#sortby").val(oldVal);
             }
         });
     });
+
+    $("#usersortby").on('change', function() {
+        //alert("Value = " + $("#sortby").val());
+        //alert("ID = " + $.urlParam("id"));
+        var oldVal = $("#usersortby").val();
+        $.ajax({
+            url: "/user/view?id=" + $.urlParam("id") + "&sortby=" + $("#usersortby").val(),
+            content: document.body,
+            success: function (result) {
+                document.body.innerHTML = result;
+                bindSortDropDowns();
+                bindJumpButtons();
+                //Set the drop down to the current sort val
+                $("#usersortby").val(oldVal);
+            }
+        });
+    });
+}
+
+function bindJumpButtons() {
+    $("#JumpComment").on('click', function () {
+        window.location.href="#JumpAMA";
+    });
+
+    $("#JumpAMA").on('click', function() {
+        window.location.href="#JumpComment";
+    });
 }
 
 $(document).ready(function () {
-    bindSortDropDown();
+    bindSortDropDowns();
+    bindJumpButtons();
 });

@@ -7,6 +7,14 @@
         <a th:if="${user.isFollowing(target)}" class="btn btn-xs btn-danger" th:href="@{/user/unfollow(id=${target.id})}">Unfollow</a>
         <a th:unless="${user.isFollowing(target)}" class="btn btn-xs btn-success" th:href="@{/user/follow(id=${target.id})}">Follow</a>
     </span>
+    <p> Sort by:
+        <select id="usersortby">
+            <option value="oldest">Oldest First</option>
+            <option value="newest">Newest First</option>
+            <option value="upvotes">Most Upvoted</option>
+            <option value="downvotes">Most Downvoted</option>
+        </select>
+    </p>
     <h3>AMA's by this User
         <a class="btn btn-xs btn-primary" role="button" data-toggle="collapse" id="JumpAMA"
            aria-expanded="false">

@@ -79,6 +79,24 @@ public class PostController {
         return "redirect:/ama/view?id="+new Long(p.getId()).toString();
     }
 
+    @GetMapping("/ama/search")
+    public String searchAMA(@RequestParam(value = "searchTerm")String searchTerm, Model model){
+        List<Post> amas = postRepo.findByPosterIsNotNull();
+        List<Post> relatedAmas = new ArrayList<>();
+
+        for(Post ama : amas){
+            if((ama.getTitle().contains(searchTerm)) ||
+                    (ama.getTags().contains(searchTerm)) ||
+                    (ama.getDescription().contains(searchTerm)))
+                relatedAmas.add(ama);
+        }
+
+        model.addAttribute("amas", relatedAmas);
+        model.addAttribute("page", "index");
+        model.addAttribute("title", "Resulting AMAs");
+        return "ama/index";
+    }
+
     @RequestMapping("/ama/up")
     public @ResponseBody VoteParameters upVote(@RequestParam(value="id")long id) {
         Post post = postRepo.findOne(id);

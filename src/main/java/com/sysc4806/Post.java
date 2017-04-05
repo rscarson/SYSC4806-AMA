@@ -51,6 +51,8 @@ public class Post {
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<User> dnVoters;
 
+    private boolean completed;
+
     private int votes;
 
     public Post() {
@@ -75,6 +77,9 @@ public class Post {
         PrettyTime p = new PrettyTime();
         return p.format(updated);
     }
+
+    public boolean isCompleted() { return completed;  }
+    public void setCompleted(boolean completed) { this.completed = completed; }
 
     public Date getCreated() { return created; }
     public String getFormattedCreated() {

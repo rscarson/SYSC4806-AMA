@@ -7,9 +7,12 @@
     <div>
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title" th:text="${ama.title}"></h3>
+                <h3 class="panel-title">
+                    <span th:if="${ama.completed}" class="text-success glyphicon glyphicon-ok"></span>
+                    <span th:remove="tag" th:text="${ama.title}"></span>
+                </h3>
                 <small th:each="tag : ${ama.getTags()}">
-                    <a class="text-muted" href="#" th:text="${'#'+tag}"></a>
+                    <a class="text-muted" th:href="@{/ama/search(searchTerm=${tag})}" th:text="${'#'+tag}"></a>
                 </small>
             </div>
 
@@ -84,24 +87,34 @@
                     <span th:replace="fragments/user :: user(${ama.poster})"></span>
                     <span th:replace="fragments/user :: follow(${user}, ${ama.poster})"></span>
                 </small>
+                <div class="btn-group" role="group">
+                    <!-- Reply btn -->
+                    <a class="btn btn-xs btn-primary" role="button" data-toggle="collapse"
+                       th:href="${'#preplycollapse'+ama.id}" aria-expanded="false" th:aria-controls="${'#preplycollapse'+ama.id}">
+                        Reply
+                    </a>
 
-                <!-- Reply btn -->
-                <a class="btn btn-xs btn-primary" role="button" data-toggle="collapse"
-                   th:href="${'#preplycollapse'+ama.id}" aria-expanded="false" th:aria-controls="${'#preplycollapse'+ama.id}">
-                    Reply
-                </a>
+                    <!-- Edit btn -->
+                    <a th:unless="${ama.poster == null or user == null or ama.poster.id != user.id}" class="btn btn-xs btn-warning" role="button" data-toggle="collapse"
+                       th:href="${'#peditcollapse'+ama.id}" aria-expanded="false" th:aria-controls="${'#peditcollapse'+ama.id}">
+                        Edit
+                    </a>
+                </div>
 
-                <!-- Edit btn -->
-                <a th:unless="${ama.poster == null or user == null or ama.poster.id != user.id}" class="btn btn-xs btn-warning" role="button" data-toggle="collapse"
-                   th:href="${'#peditcollapse'+ama.id}" aria-expanded="false" th:aria-controls="${'#peditcollapse'+ama.id}">
-                    Edit
-                </a>
+                <div class="btn-group" role="group">
+                    <!-- Complete btn -->
+                    <a th:unless="${ama.poster == null or user == null or ama.poster.id != user.id or ama.completed}" th:href="@{/ama/complete(id=${ama.id})}"
+                       class="btn btn-xs btn-success" role="button" onclick="return confirm('Really end this AMA?')">
+                        End AMA
+                    </a>
 
-                <!-- Delete btn -->
-                <a th:unless="${ama.poster == null or user == null or ama.poster.id != user.id}" th:href="@{/ama/delete(id=${ama.id})}"
-                   class="btn btn-xs btn-danger" role="button" onclick="return confirm('Really delete this AMA?')">
-                    Delete
-                </a>
+                    <!-- Delete btn -->
+                    <a th:unless="${ama.poster == null or user == null or ama.poster.id != user.id}" th:href="@{/ama/delete(id=${ama.id})}"
+                       class="btn btn-xs btn-danger" role="button" onclick="return confirm('Really delete this AMA?')">
+                        Delete
+                    </a>
+                </div>
+
             </div>
         </div>
 

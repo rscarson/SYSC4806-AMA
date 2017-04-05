@@ -31,7 +31,7 @@
                     <a href="/">Ongoing AMAs <span th:if="${page == 'index'}" class="sr-only">(current)</span></a>
                 </li>
                 <li th:classappend="${page == 'completed'}?active">
-                    <a href="/">Completed AMAs <span th:if="${page == 'completed'}" class="sr-only">(current)</span></a>
+                    <a href="/completed">Completed AMAs <span th:if="${page == 'completed'}" class="sr-only">(current)</span></a>
                 </li>
                 <li th:if="${user != null}" th:classappend="${page == 'following'}?active">
                     <a href="/following">Following <span th:if="${page == 'following'}" class="sr-only">(current)</span></a>

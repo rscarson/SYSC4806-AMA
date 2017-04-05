@@ -10,15 +10,17 @@ import java.util.List;
  */
 @Repository
 public interface PostRepository extends CrudRepository<Post, Long> {
-    public List<Post> findByPoster(User poster);
+    List<Post> findByPoster(User poster);
 
-    public List<Post> findByPosterOrderByVotesAsc(User poster);
+    List<Post> findByPosterIsNotNullAndCompleted(boolean completed);
 
-    public List<Post> findByPosterOrderByVotesDesc(User poster);
+    List<Post> findByPosterOrderByVotesAsc(User poster);
 
-    public List<Post> findByPosterOrderByCreatedAsc(User poster);
+    List<Post> findByPosterOrderByVotesDesc(User poster);
 
-    public List<Post> findByPosterOrderByCreatedDesc(User poster);
+    List<Post> findByPosterOrderByCreatedAsc(User poster);
 
-    public List<Post> findByPosterIsNotNull();
+    List<Post> findByPosterOrderByCreatedDesc(User poster);
+
+    List<Post> findByPosterIsNotNull();
 }

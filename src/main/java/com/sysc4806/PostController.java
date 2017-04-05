@@ -34,9 +34,18 @@ public class PostController {
 
     @RequestMapping({"/"})
     public String amaIndex(Model model) {
-        model.addAttribute("amas", postRepo.findByPosterIsNotNull());
+        model.addAttribute("amas", postRepo.findByPosterIsNotNullAndCompleted(false));
         model.addAttribute("page", "index");
-        model.addAttribute("title", "All AMAs");
+        model.addAttribute("title", "Ongoing AMAs");
+
+        return "ama/index";
+    }
+
+    @RequestMapping({"/completed"})
+    public String amaCompleted(Model model) {
+        model.addAttribute("amas", postRepo.findByPosterIsNotNullAndCompleted(true));
+        model.addAttribute("page", "complted");
+        model.addAttribute("title", "Completed AMAs");
 
         return "ama/index";
     }
@@ -95,6 +104,17 @@ public class PostController {
         model.addAttribute("page", "index");
         model.addAttribute("title", "Resulting AMAs");
         return "ama/index";
+    }
+
+    @RequestMapping("/ama/complete")
+    public String complete(@RequestParam(value="id")long id) {
+        Post post = postRepo.findOne(id);
+        if (post == null)
+            throw new ResourceNotFoundException();
+
+        post.setCompleted(true);
+        postRepo.save(post);
+        return "redirect:/ama/view?id="+new Long(post.getId()).toString();
     }
 
     @RequestMapping("/ama/up")

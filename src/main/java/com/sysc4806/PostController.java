@@ -83,12 +83,18 @@ public class PostController {
     public String searchAMA(@RequestParam(value = "searchTerm")String searchTerm, Model model){
         List<Post> amas = postRepo.findByPosterIsNotNull();
         List<Post> relatedAmas = new ArrayList<>();
+        searchTerm = searchTerm.toLowerCase();
 
         for(Post ama : amas){
-            if((ama.getTitle().contains(searchTerm)) ||
-                    (ama.getTags().contains(searchTerm)) ||
-                    (ama.getDescription().contains(searchTerm)))
+            if((ama.getTitle().toLowerCase().contains(searchTerm)) ||
+                    (ama.getDescription().toLowerCase().contains(searchTerm)))
                 relatedAmas.add(ama);
+            for(String tag : ama.getTags()){
+                if(tag.toLowerCase().contains(searchTerm)){
+                    relatedAmas.add(ama);
+                    break;
+                }
+            }
         }
 
         model.addAttribute("amas", relatedAmas);

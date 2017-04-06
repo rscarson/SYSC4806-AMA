@@ -3,7 +3,54 @@
 <head></head>
 <body>
 <div class="container" th:fragment="content">
-    <h3 class="text-center text-muted">Nothing to display</h3>
+    <h3 th:if="${amas.size() == 0}" class="text-center text-muted">Nothing to display</h3>
+    <span th:each="ama : ${amas}" th:remove="tag">
+        <div class="panel panel-default">
+            <div class="panel-body row">
+                <div class="col-xs-1 vote-right">
+                    <div class="row vcenter">
+                        <div class="col-md-6">
+                            <p class="votep">
+                                <a class="btn btn-xs" th:attr="data-id=${ama.id}" th:id="${'postup'+ama.id}" onclick="vote('/ama/up', 'post', this)"
+                                   th:classappend="${ama.hasUpVoted(user)}?'active btn-success':'btn-default'">
+                                    <span class="text-success glyphicon glyphicon-triangle-top"></span>
+                                </a>
+                            </p>
+                            <p class="votep">
+                                <a class="btn btn-xs" th:attr="data-id=${ama.id}" th:id="${'postdn'+ama.id}" onclick="vote('/ama/down', 'post', this)"
+                                   th:classappend="${ama.hasDownVoted(user)}?'active btn-danger':'btn-default'">
+                                    <span class="text-danger glyphicon glyphicon-triangle-bottom"></span>
+                                </a>
+                            </p>
+                        </div>
+                        <div class="col-md-6" th:id="${'postcount'+ama.id}">
+                            <h4 th:if="${ama.votes &lt; 0}" class="text-danger" th:text="${ama.votes}"></h4>
+                            <h4 th:if="${ama.votes == 0}" th:text="${ama.votes}"></h4>
+                            <h4  th:if="${ama.votes &gt; 0}" class="text-success" th:text="${ama.votes}"></h4>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xs-11">
+                    <a th:href="@{/ama/view(id=${ama.id})}">
+                    <h3>
+                        <span th:if="${ama.completed}" class="text-success glyphicon glyphicon-ok"></span>
+                        <span th:remove="tag" th:text="${ama.title}"></span>
+                    </h3>
+                    </a>
+                    <small th:each="tag : ${ama.getTags()}">
+                        <a class="text-muted" th:href="@{/ama/search(searchTerm=${tag})}" th:text="${'#'+tag}"></a>
+                    </small>
+                </div>
+            </div>
+            <div class="panel-footer">
+                <small class="text-muted">Submitted <span th:text="${ama.getFormattedCreated()}" th:remove="tag"></span> by
+                    <span th:replace="fragments/user :: user(${ama.poster})"></span>
+                    <span th:replace="fragments/user :: follow(${ama.poster})"></span>
+                </small>
+            </div>
+        </div>
+    </span>
 </div>
 </body>
 </html>

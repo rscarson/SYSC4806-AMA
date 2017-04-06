@@ -80,7 +80,7 @@ public class UserController {
         current.follow(u); userRepo.save(current);
         model.addAttribute("title", "Overview for " + u.getName());
         model.addAttribute("target", u);
-        return "user/view";
+        return "redirect:/user/view?id="+new Long(u.getId()).toString();
     }
 
     @RequestMapping("/user/unfollow")
@@ -94,6 +94,6 @@ public class UserController {
         current.unfollow(u); userRepo.save(current);
         model.addAttribute("title", "Overview for " + u.getName());
         model.addAttribute("target", u);
-        return "user/view";
+        return "redirect:/user/view?id="+new Long(u.getId()).toString();
     }
 }

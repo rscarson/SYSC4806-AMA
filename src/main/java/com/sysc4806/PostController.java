@@ -52,7 +52,12 @@ public class PostController {
 
     @RequestMapping("/following")
     public String following(Model model) {
-        List<Post> posts = postRepo.findByPoster(AuthenticationController.CurrentUser());
+        List<Post> posts = new ArrayList<>();
+        User me = AuthenticationController.CurrentUser();
+        for (User u : me.getFollowing()) {
+            posts.addAll(postRepo.findByPoster(u));
+        }
+
         model.addAttribute("amas", posts);
         model.addAttribute("page", "following");
         model.addAttribute("title", "AMAs By Those I Follow");

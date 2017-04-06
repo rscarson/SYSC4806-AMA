@@ -44,7 +44,7 @@ public class PostController {
     @RequestMapping({"/completed"})
     public String amaCompleted(Model model) {
         model.addAttribute("amas", postRepo.findByPosterIsNotNullAndCompleted(true));
-        model.addAttribute("page", "complted");
+        model.addAttribute("page", "completed");
         model.addAttribute("title", "Completed AMAs");
 
         return "ama/index";
